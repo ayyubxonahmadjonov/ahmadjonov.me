@@ -5,6 +5,14 @@ import {
   BookOpen, Smartphone, Calendar,
 } from 'lucide-react';
 import profileImage from "../assets/profile_image.png";
+import tiinImg from "../assets/tiin.png";
+import invanImg from "../assets/invan.png";
+import carinfoproImg from "../assets/carinfopro.jpg";
+import dictionaryImg from "../assets/dictionary.png";
+import sajdaImg from "../assets/sajda.jpg";
+import stroybazaImg from "../assets/stroybaza.jpg";
+import tictactoeImg from "../assets/tictactoe.png";
+import vocabmasterImg from "../assets/vocabmaster.jpg";
 
 type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
@@ -23,15 +31,15 @@ export default function App() {
   ];
 
   const projects = [
-    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. Barcode scanning, points tracking, special offers.', gradient: 'from-green-400 to-emerald-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623', letter: 'T' },
-    { name: 'INVAN MOBILE', description: 'Business management & inventory control app. Sales tracking, stock management, reports.', gradient: 'from-blue-400 to-indigo-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383', letter: 'I' },
-    { name: 'CARINFOPRO', description: "Scan a car sticker → see vehicle owner's contact data. QR-based system for Uzbekistan roads.", gradient: 'from-indigo-400 to-purple-600', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034', letter: 'C' },
-    { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', gradient: 'from-orange-400 to-red-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic', letter: 'D' },
-    { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', gradient: 'from-teal-400 to-cyan-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453', letter: 'S' },
-    { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', gradient: 'from-yellow-400 to-orange-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756', letter: 'S' },
-    { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', gradient: 'from-pink-400 to-rose-600', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498', letter: 'T' },
-    { name: 'VOCAB MASTER', description: 'English vocabulary learning app with spaced repetition.', gradient: 'from-purple-400 to-pink-600', googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master', letter: 'V' },
-    { name: 'INVAN POS', description: 'Point of Sale system: sales, discounts, barcode scanning, Bluetooth thermal printer, daily reports.', gradient: 'from-cyan-400 to-blue-600', isInternal: true, letter: 'P' },
+    { name: 'INVAN POS', description: 'Enterprise POS system deployed on 100+ cashier terminals across Uzbekistan. Direct tax integration via tasnif.soliq.uz, payment systems: Payme, Click, Uzum. Features: barcode scanning, Bluetooth thermal printing, discounts, daily & monthly reports, inventory tracking.', img: null, isInternal: true },
+    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. Barcode scanning, points tracking, special offers.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'INVAN MOBILE', description: 'Business management & inventory control app. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
+    { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
+    { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
+    { name: 'CARINFOPRO', description: "Scan a car sticker → see vehicle owner's contact data. QR-based system for Uzbekistan roads.", img: carinfoproImg,googlePlayUrl:'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
+    { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
+    { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
+    { name: 'VOCAB MASTER', description: 'English vocabulary learning app with spaced repetition.', img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
   ];
 
   const accent = '#f59e0b';
@@ -114,7 +122,7 @@ export default function App() {
             {[
               { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com' },
               { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22' },
-              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 8, 2008' },
+              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 3, 2008' },
               { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan' },
             ].map(({ Icon, label, value }) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', borderRadius: '10px', padding: '11px 14px', border: '1px solid #2e2e2e' }}>
@@ -349,8 +357,11 @@ export default function App() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.5)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = '#2e2e2e'; e.currentTarget.style.transform = 'translateY(0)'; }}
                     >
-                      <div className={`bg-gradient-to-br ${project.gradient}`} style={{ width: '52px', height: '52px', borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-                        <span style={{ fontSize: '24px', fontWeight: 700, color: '#fff' }}>{project.letter}</span>
+                      <div style={{ width: '52px', height: '52px', borderRadius: '13px', overflow: 'hidden', marginBottom: '12px', backgroundColor: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {project.img
+                          ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <span style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>P</span>
+                        }
                       </div>
                       <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>{project.name}</h3>
                       <p style={{ fontSize: '12px', color: '#9ca3af', lineHeight: 1.6, marginBottom: '12px' }}>{project.description}</p>
