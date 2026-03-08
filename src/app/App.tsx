@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Mail, Phone, MapPin, Briefcase, GraduationCap,
   Code2, MessageCircle, Linkedin, Instagram, Github,
@@ -18,6 +18,13 @@ type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('about');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   const skills = [
     { name: 'Flutter/Dart', level: 90 },
@@ -36,7 +43,7 @@ export default function App() {
     { name: 'INVAN MOBILE', description: 'Business management & inventory control app. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
     { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
     { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
-    { name: 'CARINFOPRO', description: "Scan a car sticker → see vehicle owner's contact data. QR-based system for Uzbekistan roads.", img: carinfoproImg,googlePlayUrl:'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
+    { name: 'CARINFOPRO', description: "Scan a car sticker → see vehicle owner's contact data. QR-based system for Uzbekistan roads.", img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
     { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
     { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
     { name: 'VOCAB MASTER', description: 'English vocabulary learning app with spaced repetition.', img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
@@ -63,81 +70,94 @@ export default function App() {
     </a>
   );
 
-  // Section header like Azamov X
   const SectionHeader = ({ Icon, title }: { Icon: any; title: string }) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
       <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#2a2a2a', border: '1px solid #383838', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Icon style={{ width: '18px', height: '18px', color: accent }} />
       </div>
-      <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#fff', fontFamily: "'DM Sans', sans-serif" }}>{title}</h2>
+      <h2 style={{ fontSize: isMobile ? '20px' : '26px', fontWeight: 700, color: '#fff', fontFamily: "'DM Sans', sans-serif" }}>{title}</h2>
     </div>
   );
 
   return (
-    // outer background
-    <div style={{ minHeight: '100vh', backgroundColor: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: isMobile ? '16px' : '28px', fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ width: '100%', maxWidth: '1240px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? '16px' : '24px', alignItems: 'flex-start' }}>
 
-      {/* wrapper — sidebar + card side by side, NOT inside one rounded box */}
-      <div style={{ width: '100%', maxWidth: '1240px', display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
-
-        {/* ── LEFT SIDEBAR — standalone rounded card ── */}
+        {/* ── SIDEBAR ── */}
         <aside style={{
-          width: '300px',
+          width: isMobile ? '100%' : '300px',
           flexShrink: 0,
           backgroundColor: '#1e1e1e',
           borderRadius: '20px',
           border: '1px solid #2a2a2a',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          padding: '32px 22px',
+          padding: isMobile ? '24px 20px' : '32px 22px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0',
-          position: 'sticky',
+          position: isMobile ? 'static' : 'sticky',
           top: '28px',
         }}>
+          {/* Mobile: horizontal layout for photo + name */}
+          {isMobile ? (
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '20px' }}>
+              <img src={profileImage} alt="Ayyubxon Ahmadjonov"
+                style={{ width: '90px', height: '90px', borderRadius: '14px', objectFit: 'cover', flexShrink: 0 }}
+              />
+              <div>
+                <h1 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', marginBottom: '8px', fontFamily: "'DM Sans', sans-serif" }}>
+                  Ayyubxon Ahmadjonov
+                </h1>
+                <span style={{ fontSize: '12px', color: '#d1d5db', padding: '5px 14px', borderRadius: '7px', backgroundColor: '#2a2a2a' }}>
+                  Flutter Developer
+                </span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <img src={profileImage} alt="Ayyubxon Ahmadjonov"
+                  style={{ width: '175px', height: '175px', borderRadius: '18px', objectFit: 'cover' }}
+                />
+              </div>
+              <h1 style={{ fontSize: '21px', fontWeight: 700, textAlign: 'center', color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>
+                Ayyubxon Ahmadjonov
+              </h1>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+                <span style={{ fontSize: '13px', color: '#d1d5db', padding: '7px 22px', borderRadius: '8px', backgroundColor: '#2a2a2a' }}>
+                  Flutter Developer
+                </span>
+              </div>
+            </>
+          )}
 
-          {/* Square photo */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-            <img src={profileImage} alt="Ayyubxon Ahmadjonov"
-              style={{ width: '175px', height: '175px', borderRadius: '18px', objectFit: 'cover' }}
-            />
-          </div>
-
-          {/* Name */}
-          <h1 style={{ fontSize: '21px', fontWeight: 700, textAlign: 'center', color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>
-            Ayyubxon Ahmadjonov
-          </h1>
-
-          {/* Badge */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <span style={{ fontSize: '13px', color: '#d1d5db', padding: '7px 22px', borderRadius: '8px', backgroundColor: '#2a2a2a' }}>
-              Flutter Developer
-            </span>
-          </div>
-
-          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '22px' }} />
+          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
 
           {/* Contact cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '22px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr',
+            gap: '8px',
+            marginBottom: '16px',
+          }}>
             {[
               { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com' },
               { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22' },
-              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 3, 2008' },
+              { Icon: Calendar, label: 'BIRTHDAY', value: 'April 3, 2007' },
               { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan' },
             ].map(({ Icon, label, value }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', borderRadius: '10px', padding: '11px 14px', border: '1px solid #2e2e2e' }}>
-                <div style={{ width: '38px', height: '38px', borderRadius: '9px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon style={{ width: '16px', height: '16px', color: accent }} />
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#252525', borderRadius: '10px', padding: '10px 12px', border: '1px solid #2e2e2e' }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '8px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon style={{ width: '15px', height: '15px', color: accent }} />
                 </div>
-                <div style={{ overflow: 'hidden' }}>
-                  <p style={{ fontSize: '10px', color: '#6b7280', marginBottom: '2px', letterSpacing: '0.07em', fontWeight: 600 }}>{label}</p>
-                  <p style={{ fontSize: '12.5px', color: '#e5e7eb', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</p>
+                <div style={{ overflow: 'hidden', minWidth: 0 }}>
+                  <p style={{ fontSize: '9px', color: '#6b7280', marginBottom: '1px', letterSpacing: '0.07em', fontWeight: 600 }}>{label}</p>
+                  <p style={{ fontSize: '11.5px', color: '#e5e7eb', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '22px' }} />
+          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
 
           {/* Social icons */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
@@ -158,7 +178,7 @@ export default function App() {
           </div>
         </aside>
 
-        {/* ── RIGHT CONTENT — standalone rounded card ── */}
+        {/* ── RIGHT CONTENT ── */}
         <div style={{
           flex: 1,
           backgroundColor: '#1e1e1e',
@@ -168,15 +188,16 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          minHeight: '600px',
+          minHeight: isMobile ? 'auto' : '600px',
+          width: isMobile ? '100%' : 'auto',
         }}>
 
-          {/* Nav */}
-          <nav style={{ borderBottom: '1px solid #2a2a2a', padding: '0 32px', flexShrink: 0 }}>
-            <div style={{ display: 'flex', gap: '28px' }}>
+          {/* Nav tabs */}
+          <nav style={{ borderBottom: '1px solid #2a2a2a', padding: isMobile ? '0 16px' : '0 32px', flexShrink: 0, overflowX: 'auto' }}>
+            <div style={{ display: 'flex', gap: isMobile ? '4px' : '28px', minWidth: 'max-content' }}>
               {(['about', 'resume', 'portfolio', 'contact'] as TabType[]).map((tab) => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
-                  style={{ position: 'relative', padding: '20px 0 18px', fontSize: '15px', fontWeight: 500, color: activeTab === tab ? accent : '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textTransform: 'capitalize', transition: 'color 0.2s' }}
+                  style={{ position: 'relative', padding: isMobile ? '14px 12px 12px' : '20px 0 18px', fontSize: isMobile ? '13px' : '15px', fontWeight: 500, color: activeTab === tab ? accent : '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textTransform: 'capitalize', transition: 'color 0.2s', whiteSpace: 'nowrap' }}
                 >
                   {tab}
                   {activeTab === tab && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', backgroundColor: accent, borderRadius: '2px' }} />}
@@ -185,21 +206,21 @@ export default function App() {
             </div>
           </nav>
 
-          {/* Scrollable content */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '36px' }}>
+          {/* Content area */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '20px 16px' : '36px' }}>
 
             {/* ── ABOUT ── */}
             {activeTab === 'about' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '28px' : '40px' }}>
 
                 <section>
-                  <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>About Me</h2>
-                  <div style={{ height: '3px', width: '44px', backgroundColor: accent, borderRadius: '2px', marginBottom: '18px' }} />
-                  <p style={{ color: '#d1d5db', lineHeight: 1.8, fontSize: '15px', marginBottom: '14px' }}>
+                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>About Me</h2>
+                  <div style={{ height: '3px', width: '44px', backgroundColor: accent, borderRadius: '2px', marginBottom: '16px' }} />
+                  <p style={{ color: '#d1d5db', lineHeight: 1.8, fontSize: isMobile ? '14px' : '15px', marginBottom: '12px' }}>
                     I'm a Flutter Developer with nearly 1 year of experience building cross-platform mobile apps for both iOS and Android.
                     Currently working full-time at Invan Soft, Tashkent — developing production-grade apps used by real businesses.
                   </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '15px', color: '#d1d5db' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', fontSize: isMobile ? '14px' : '15px', color: '#d1d5db' }}>
                     <p>🚀 Building clean architecture Flutter apps since 2023.</p>
                     <p>📱 10+ apps published on Google Play & App Store.</p>
                     <p>🎯 Focused on performance, clean code, and great UX.</p>
@@ -207,8 +228,8 @@ export default function App() {
                 </section>
 
                 <section>
-                  <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>What I'm Doing</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>What I'm Doing</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
                     {[
                       { Icon: Smartphone, title: 'Mobile Apps', desc: 'Professional Flutter development for iOS and Android. Clean architecture, BLoC state management, Firebase integration.' },
                       { Icon: Code2, title: 'Backend Integration', desc: 'RESTful APIs, WebSocket, Firebase (Auth, Firestore, Push Notifications), real-time data sync.' },
@@ -216,15 +237,15 @@ export default function App() {
                       { Icon: Briefcase, title: 'App Deployment', desc: 'Google Play Store and Apple App Store publishing, versioning, signing, and release management.' },
                     ].map(({ Icon, title, desc }) => (
                       <div key={title}
-                        style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '16px', padding: '22px', display: 'flex', gap: '16px', alignItems: 'flex-start', transition: 'border-color 0.2s' }}
+                        style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: isMobile ? '16px' : '22px', display: 'flex', gap: '14px', alignItems: 'flex-start', transition: 'border-color 0.2s' }}
                         onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(245,158,11,0.4)')}
                         onMouseLeave={e => (e.currentTarget.style.borderColor = '#2e2e2e')}
                       >
-                        <div style={{ width: '46px', height: '46px', borderRadius: '12px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Icon style={{ width: '22px', height: '22px', color: accent }} />
+                        <div style={{ width: '42px', height: '42px', borderRadius: '11px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Icon style={{ width: '20px', height: '20px', color: accent }} />
                         </div>
                         <div>
-                          <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '16px', marginBottom: '7px' }}>{title}</h3>
+                          <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '15px', marginBottom: '6px' }}>{title}</h3>
                           <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.6 }}>{desc}</p>
                         </div>
                       </div>
@@ -233,8 +254,8 @@ export default function App() {
                 </section>
 
                 <section>
-                  <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>My Skills</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px' }}>
+                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>My Skills</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '14px 40px' }}>
                     {skills.map(skill => (
                       <div key={skill.name}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -251,23 +272,21 @@ export default function App() {
               </div>
             )}
 
-            {/* ── RESUME — Azamov X style ── */}
+            {/* ── RESUME ── */}
             {activeTab === 'resume' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '44px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
-                {/* Work */}
                 <section>
                   <SectionHeader Icon={Briefcase} title="Work" />
-                  <div style={{ position: 'relative', paddingLeft: '32px' }}>
+                  <div style={{ position: 'relative', paddingLeft: '28px' }}>
                     <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#2e2e2e' }} />
 
-                    {/* Role 1 */}
-                    <div style={{ position: 'relative', marginBottom: '32px' }}>
-                      <div style={{ position: 'absolute', left: '-26px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
-                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '17px', marginBottom: '3px' }}>Flutter Developer</h3>
-                      <p style={{ fontSize: '14px', color: accent, marginBottom: '3px' }}>Jun 2025 – Present</p>
-                      <p style={{ fontSize: '14px', color: '#9ca3af', marginBottom: '12px' }}>Invan Soft, Tashkent</p>
-                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ position: 'relative', marginBottom: '28px' }}>
+                      <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
+                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '3px' }}>Flutter Developer</h3>
+                      <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>Jun 2025 – Present</p>
+                      <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft, Tashkent</p>
+                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         {[
                           'Developed and maintained 5+ production mobile apps',
                           'Built POS system: sales, discounts, barcode scanning, receipt printing',
@@ -275,29 +294,26 @@ export default function App() {
                           'Tiin Loyalty — cashback & loyalty card app for supermarkets',
                           'Inventory Turnover — stock rotation analytics',
                         ].map(item => (
-                          <li key={item} style={{ display: 'flex', gap: '10px', fontSize: '14px', color: '#d1d5db' }}>
-                            <span style={{ color: accent, flexShrink: 0, marginTop: '1px' }}>•</span>
-                            <span>{item}</span>
+                          <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
+                            <span style={{ color: accent, flexShrink: 0 }}>•</span><span>{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    {/* Role 2 */}
                     <div style={{ position: 'relative' }}>
-                      <div style={{ position: 'absolute', left: '-26px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#a855f7' }} />
-                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '17px', marginBottom: '3px' }}>Flutter Developer Intern</h3>
-                      <p style={{ fontSize: '14px', color: accent, marginBottom: '3px' }}>Jun 2024 – May 2025</p>
-                      <p style={{ fontSize: '14px', color: '#9ca3af', marginBottom: '12px' }}>Invan Soft, Tashkent</p>
-                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#a855f7' }} />
+                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '3px' }}>Flutter Developer Intern</h3>
+                      <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>Jun 2024 – May 2025</p>
+                      <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft, Tashkent</p>
+                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         {[
                           'Learned BLoC and Clean Architecture patterns',
                           'Contributed to real production projects under senior guidance',
                           'Completed Flutter & Dart Training Program',
                         ].map(item => (
-                          <li key={item} style={{ display: 'flex', gap: '10px', fontSize: '14px', color: '#d1d5db' }}>
-                            <span style={{ color: '#a855f7', flexShrink: 0, marginTop: '1px' }}>•</span>
-                            <span>{item}</span>
+                          <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
+                            <span style={{ color: '#a855f7', flexShrink: 0 }}>•</span><span>{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -305,35 +321,33 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* Education */}
                 <section>
                   <SectionHeader Icon={GraduationCap} title="Education" />
-                  <div style={{ position: 'relative', paddingLeft: '32px', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ position: 'relative', paddingLeft: '28px', display: 'flex', flexDirection: 'column' }}>
                     <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#2e2e2e' }} />
                     {[
                       { name: 'Invan Soft', sub: 'Flutter & Dart Training', period: '2023 – 2024', extra: 'Mobile Development Practical Course' },
                       { name: 'Vocational School No.1, Fergana', sub: 'IT Specialization', period: '2024 – 2026', extra: '2nd year student' },
                       { name: 'Everest Language Learning Center', sub: 'English Language Program', period: 'IELTS Band 6.0', extra: undefined },
                     ].map(({ name, sub, period, extra }, i) => (
-                      <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '28px' : '0' }}>
-                        <div style={{ position: 'absolute', left: '-26px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
-                        <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '17px', marginBottom: '3px' }}>{name}</h3>
-                        <p style={{ fontSize: '14px', color: accent, marginBottom: '3px' }}>{period}</p>
-                        <p style={{ fontSize: '14px', color: '#d1d5db' }}>{sub}{extra ? ` — ${extra}` : ''}</p>
+                      <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '24px' : '0' }}>
+                        <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
+                        <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '2px' }}>{name}</h3>
+                        <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>{period}</p>
+                        <p style={{ fontSize: '13px', color: '#d1d5db' }}>{sub}{extra ? ` — ${extra}` : ''}</p>
                       </div>
                     ))}
                   </div>
                 </section>
 
-                {/* Skills */}
                 <section>
                   <SectionHeader Icon={Code2} title="My Skills" />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 40px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px 40px' }}>
                     {skills.map(skill => (
                       <div key={skill.name}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '14px', color: '#d1d5db', fontWeight: 500 }}>{skill.name}</span>
-                          <span style={{ fontSize: '13px', color: accent }}>{skill.level}%</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                          <span style={{ fontSize: '13px', color: '#d1d5db', fontWeight: 500 }}>{skill.name}</span>
+                          <span style={{ fontSize: '12px', color: accent }}>{skill.level}%</span>
                         </div>
                         <div style={{ height: '5px', backgroundColor: '#2a2a2a', borderRadius: '999px', overflow: 'hidden' }}>
                           <div style={{ width: `${skill.level}%`, height: '100%', background: `linear-gradient(to right, ${accent}, #ef4444)`, borderRadius: '999px' }} />
@@ -342,34 +356,33 @@ export default function App() {
                     ))}
                   </div>
                 </section>
-
               </div>
             )}
 
             {/* ── PORTFOLIO ── */}
             {activeTab === 'portfolio' && (
               <div>
-                <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '24px', fontFamily: "'DM Sans', sans-serif" }}>Portfolio</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '20px', fontFamily: "'DM Sans', sans-serif" }}>Portfolio</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: '12px' }}>
                   {projects.map((project) => (
                     <div key={project.name}
-                      style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '16px', padding: '20px', transition: 'all 0.2s' }}
+                      style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: isMobile ? '14px' : '20px', transition: 'all 0.2s' }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.5)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = '#2e2e2e'; e.currentTarget.style.transform = 'translateY(0)'; }}
                     >
-                      <div style={{ width: '52px', height: '52px', borderRadius: '13px', overflow: 'hidden', marginBottom: '12px', backgroundColor: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', overflow: 'hidden', marginBottom: '10px', backgroundColor: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {project.img
                           ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          : <span style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>P</span>
+                          : <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>P</span>
                         }
                       </div>
-                      <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>{project.name}</h3>
-                      <p style={{ fontSize: '12px', color: '#9ca3af', lineHeight: 1.6, marginBottom: '12px' }}>{project.description}</p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <h3 style={{ fontSize: isMobile ? '11px' : '13px', fontWeight: 700, color: '#fff', marginBottom: '5px' }}>{project.name}</h3>
+                      <p style={{ fontSize: isMobile ? '10px' : '12px', color: '#9ca3af', lineHeight: 1.5, marginBottom: '10px' }}>{project.description}</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
                         {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
                         {project.isInternal && (
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#2a2a2a', borderRadius: '8px', padding: '7px', fontSize: '12px', color: '#6b7280' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#2a2a2a', borderRadius: '8px', padding: '6px', fontSize: '11px', color: '#6b7280' }}>
                             Internal Product
                           </div>
                         )}
@@ -383,14 +396,14 @@ export default function App() {
             {/* ── CONTACT ── */}
             {activeTab === 'contact' && (
               <div style={{ maxWidth: '580px' }}>
-                <div style={{ marginBottom: '18px' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(34,197,94,0.15)', padding: '7px 16px', borderRadius: '999px', fontSize: '13px', color: '#86efac', border: '1px solid rgba(34,197,94,0.25)' }}>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
+                <div style={{ marginBottom: '16px' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(34,197,94,0.15)', padding: '6px 14px', borderRadius: '999px', fontSize: '12px', color: '#86efac', border: '1px solid rgba(34,197,94,0.25)' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
                     Open to work
                   </span>
                 </div>
-                <h2 style={{ fontSize: '30px', fontWeight: 700, color: '#fff', marginBottom: '28px', fontFamily: "'DM Sans', sans-serif" }}>Let's Work Together</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <h2 style={{ fontSize: isMobile ? '22px' : '30px', fontWeight: 700, color: '#fff', marginBottom: '20px', fontFamily: "'DM Sans', sans-serif" }}>Let's Work Together</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[
                     { href: 'mailto:ayubxonahmadjonov43@gmail.com', Icon: Mail, label: 'Email', value: 'ayubxonahmadjonov43@gmail.com' },
                     { href: 'tel:+998887392122', Icon: Phone, label: 'Phone', value: '+998 88 739 21 22' },
@@ -400,26 +413,26 @@ export default function App() {
                     { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ahmadjonov_2122' },
                   ].map(({ href, Icon, label, value }) => (
                     <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: '14px 18px', textDecoration: 'none', transition: 'all 0.2s' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '12px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.5)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = '#2e2e2e'; e.currentTarget.style.transform = 'translateY(0)'; }}
                     >
-                      <div style={{ width: '44px', height: '44px', borderRadius: '11px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Icon style={{ width: '20px', height: '20px', color: accent }} />
+                      <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Icon style={{ width: '18px', height: '18px', color: accent }} />
                       </div>
-                      <div>
-                        <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '2px' }}>{label}</p>
-                        <p style={{ fontSize: '15px', color: '#e5e7eb' }}>{value}</p>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '2px' }}>{label}</p>
+                        <p style={{ fontSize: isMobile ? '13px' : '15px', color: '#e5e7eb', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</p>
                       </div>
                     </a>
                   ))}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: '14px 18px' }}>
-                    <div style={{ width: '44px', height: '44px', borderRadius: '11px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <MapPin style={{ width: '20px', height: '20px', color: accent }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '12px 16px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <MapPin style={{ width: '18px', height: '18px', color: accent }} />
                     </div>
                     <div>
-                      <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '2px' }}>Location</p>
-                      <p style={{ fontSize: '15px', color: '#e5e7eb' }}>Fergana, Uzbekistan</p>
+                      <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '2px' }}>Location</p>
+                      <p style={{ fontSize: isMobile ? '13px' : '15px', color: '#e5e7eb' }}>Fergana, Uzbekistan</p>
                     </div>
                   </div>
                 </div>
