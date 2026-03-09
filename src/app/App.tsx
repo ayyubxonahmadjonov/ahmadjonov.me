@@ -132,10 +132,10 @@ export default function App() {
 
           <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
 
-          {/* Contact cards */}
+          {/* ✅ FIXED: Contact cards — always 1 column (gridTemplateColumns: '1fr') */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr',
+            gridTemplateColumns: '1fr',
             gap: '8px',
             marginBottom: '16px',
           }}>
