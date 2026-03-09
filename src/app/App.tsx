@@ -142,7 +142,7 @@ export default function App() {
             {[
               { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com' },
               { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22' },
-              { Icon: Calendar, label: 'BIRTHDAY', value: 'April 3, 2007' },
+              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 8, 2008' },
               { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan' },
             ].map(({ Icon, label, value }) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#252525', borderRadius: '10px', padding: '10px 12px', border: '1px solid #2e2e2e' }}>
