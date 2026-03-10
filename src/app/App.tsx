@@ -13,7 +13,7 @@ import sajdaImg from "../assets/sajda.jpg";
 import stroybazaImg from "../assets/stroybaza.jpg";
 import tictactoeImg from "../assets/tictactoe.png";
 import vocabmasterImg from "../assets/vocabmaster.jpg";
-import cvPdf from "../assets/ayyubxon_ahmadjonov.pdf";
+import cvPdf from "../assets/ayyubxon_ahmadjonov_cv.pdf";
 
 type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
