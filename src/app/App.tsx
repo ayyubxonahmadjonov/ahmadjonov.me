@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Mail, Phone, MapPin, Briefcase, GraduationCap,
   Code2, MessageCircle, Linkedin, Instagram, Github,
-  BookOpen, Smartphone, Calendar,
+  BookOpen, Smartphone, Calendar, Download,
 } from 'lucide-react';
 import profileImage from "../assets/profile_image.png";
 import tiinImg from "../assets/tiin.png";
@@ -13,6 +13,7 @@ import sajdaImg from "../assets/sajda.jpg";
 import stroybazaImg from "../assets/stroybaza.jpg";
 import tictactoeImg from "../assets/tictactoe.png";
 import vocabmasterImg from "../assets/vocabmaster.jpg";
+import cvPdf from "../assets/ayyubxon_ahmadjonov.pdf";
 
 type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
@@ -39,7 +40,7 @@ export default function App() {
 
   const projects = [
     { name: 'INVAN POS', description: 'Enterprise POS system deployed on 100+ cashier terminals across Uzbekistan. Direct tax integration via tasnif.soliq.uz, payment systems: Payme, Click, Uzum. Features: barcode scanning, Bluetooth thermal printing, discounts, daily & monthly reports, inventory tracking.', img: null, isInternal: true },
-    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. Barcode scanning, points tracking, special offers.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. Barcode scanning, points tracking, special offers.40,000+ downloads in App Store & Google Play.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
     { name: 'INVAN MOBILE', description: 'Business management & inventory control app. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
     { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
     { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
@@ -97,7 +98,6 @@ export default function App() {
           position: isMobile ? 'static' : 'sticky',
           top: '28px',
         }}>
-          {/* Mobile: horizontal layout for photo + name */}
           {isMobile ? (
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '20px' }}>
               <img src={profileImage} alt="Ayyubxon Ahmadjonov"
@@ -132,7 +132,6 @@ export default function App() {
 
           <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
 
-          {/* ✅ FIXED: Contact cards — always 1 column (gridTemplateColumns: '1fr') */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr',
@@ -275,6 +274,33 @@ export default function App() {
             {/* ── RESUME ── */}
             {activeTab === 'resume' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
+                {/* ── Download CV Button ── */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <a
+                    href={cvPdf}
+                    download="Ayyubxon_Ahmadjonov_CV.pdf"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      backgroundColor: accent,
+                      color: '#000',
+                      padding: '10px 20px',
+                      borderRadius: '10px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      transition: 'opacity 0.2s',
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                  >
+                    <Download style={{ width: '16px', height: '16px' }} />
+                    Download CV
+                  </a>
+                </div>
 
                 <section>
                   <SectionHeader Icon={Briefcase} title="Work" />
