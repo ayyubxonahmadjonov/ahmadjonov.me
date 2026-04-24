@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Mail, Phone, MapPin, Briefcase, GraduationCap,
   Code2, MessageCircle, Linkedin, Instagram, Github,
-  BookOpen, Smartphone, Calendar, Download,
+  BookOpen, Smartphone, Calendar, Download, Copy, Check,
 } from 'lucide-react';
 import profileImage from "../assets/profile_image.png";
 import tiinImg from "../assets/tiin.png";
@@ -17,46 +18,39 @@ import cvPdf from "../assets/ayyubxon_ahmadjonov_cv.pdf";
 
 type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState<TabType>('about');
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+const ACCENT = '#f59e0b';
+const PURPLE = '#a855f7';
 
+function useCountUp(target: number, duration: number, active: boolean) {
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, []);
+    if (!active) return;
+    let startTime: number | null = null;
+    const step = (ts: number) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      setCount(Math.floor(progress * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration, active]);
+  return count;
+}
 
-  const skills = [
-    { name: 'Flutter/Dart', level: 90 },
-    { name: 'BLoC / Cubit / Provider', level: 85 },
-    { name: 'Firebase', level: 85 },
-    { name: 'RESTful APIs / WebSocket', level: 80 },
-    { name: 'UI/UX (Figma to Flutter)', level: 80 },
-    { name: 'SQLite / Hive / Shared Prefs', level: 75 },
-    { name: 'Google Play & App Store Deploy', level: 90 },
-    { name: 'English (IELTS 6.0)', level: 65 },
-  ];
-
-  const projects = [
-    { name: 'INVAN POS', description: 'Enterprise POS system deployed on 100+ cashier terminals across Uzbekistan. Direct tax integration via tasnif.soliq.uz, payment systems: Payme, Click, Uzum. Features: barcode scanning, Bluetooth thermal printing, discounts, daily & monthly reports, inventory tracking.', img: null, isInternal: true },
-    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. Barcode scanning, points tracking, special offers.40,000+ downloads in App Store & Google Play.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
-    { name: 'INVAN MOBILE', description: 'Business management & inventory control app. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
-    { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
-    { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
-    { name: 'CARINFOPRO', description: "Scan a car sticker → see vehicle owner's contact data. QR-based system for Uzbekistan roads.", img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
-    { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
-    { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
-    { name: 'VOCAB MASTER', description: 'English vocabulary learning app with spaced repetition.', img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
-  ];
-
-  const accent = '#f59e0b';
-
-  const StoreBtn = ({ href, type }: { href: string; type: 'play' | 'apple' }) => (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#111', borderRadius: '8px', padding: '7px 10px', fontSize: '12px', color: '#fff', textDecoration: 'none', border: '1px solid #2a2a2a' }}
-      onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e1e1e')}
-      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#111')}
+function StoreBtn({ href, type }: { href: string; type: 'play' | 'apple' }) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+        backgroundColor: '#161616', borderRadius: '8px', padding: '7px 10px',
+        fontSize: '12px', color: '#d1d5db', textDecoration: 'none',
+        border: '1px solid #333', fontFamily: "'DM Sans', sans-serif",
+      }}
     >
       {type === 'play' ? (
         <svg viewBox="0 0 24 24" fill="none" style={{ width: '13px', height: '13px', flexShrink: 0 }}>
@@ -68,46 +62,192 @@ export default function App() {
         </svg>
       )}
       {type === 'play' ? 'Google Play' : 'App Store'}
-    </a>
+    </motion.a>
   );
+}
 
-  const SectionHeader = ({ Icon, title }: { Icon: any; title: string }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-      <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#2a2a2a', border: '1px solid #383838', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Icon style={{ width: '18px', height: '18px', color: accent }} />
+function SkillBar({ name, level }: { name: string; level: number }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '7px' }}>
+        <span style={{ fontSize: '14px', color: '#d1d5db', fontWeight: 500 }}>{name}</span>
+        <span style={{ fontSize: '13px', color: ACCENT, fontWeight: 600 }}>{level}%</span>
       </div>
-      <h2 style={{ fontSize: isMobile ? '20px' : '26px', fontWeight: 700, color: '#fff', fontFamily: "'DM Sans', sans-serif" }}>{title}</h2>
+      <div style={{ height: '6px', backgroundColor: '#252525', borderRadius: '999px', overflow: 'hidden' }}>
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${level}%` }}
+          transition={{ duration: 1, ease: 'easeOut', delay: 0.1 }}
+          style={{ height: '100%', background: `linear-gradient(to right, ${ACCENT}, #ef4444)`, borderRadius: '999px' }}
+        />
+      </div>
     </div>
   );
+}
+
+function SectionHeader({ Icon, title, isMobile }: { Icon: React.ElementType; title: string; isMobile: boolean }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+      <div style={{
+        width: '38px', height: '38px', borderRadius: '10px', flexShrink: 0,
+        background: `linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.04))`,
+        border: `1px solid rgba(245,158,11,0.25)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <Icon style={{ width: '18px', height: '18px', color: ACCENT }} />
+      </div>
+      <h2 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight: 700, color: '#fff', fontFamily: "'DM Sans', sans-serif" }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function StatCard({ value, label, suffix = '', active }: { value: number; label: string; suffix?: string; active: boolean }) {
+  const count = useCountUp(value, 1100, active);
+  return (
+    <div style={{
+      flex: 1, minWidth: '0',
+      backgroundColor: '#222', border: '1px solid #2a2a2a', borderRadius: '14px',
+      padding: '16px 10px', textAlign: 'center',
+    }}>
+      <div style={{ fontSize: '26px', fontWeight: 800, color: ACCENT, fontFamily: "'DM Sans', sans-serif", lineHeight: 1 }}>
+        {count}{suffix}
+      </div>
+      <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '6px', fontWeight: 500 }}>{label}</div>
+    </div>
+  );
+}
+
+const TAB_VARIANTS = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+};
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<TabType>('about');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [statsActive, setStatsActive] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'about') {
+      const t = setTimeout(() => setStatsActive(true), 350);
+      return () => clearTimeout(t);
+    }
+  }, [activeTab]);
+
+  const copyToClipboard = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    });
+  };
+
+  const skills = [
+    { name: 'Flutter / Dart', level: 90 },
+    { name: 'BLoC / Cubit / Provider', level: 85 },
+    { name: 'Firebase', level: 85 },
+    { name: 'RESTful APIs / WebSocket', level: 80 },
+    { name: 'UI/UX (Figma → Flutter)', level: 80 },
+    { name: 'SQLite / Hive / Shared Prefs', level: 75 },
+    { name: 'Google Play & App Store', level: 90 },
+    { name: 'English (IELTS 6.0)', level: 65 },
+  ];
+
+  const techStack = [
+    'Flutter', 'Dart', 'Firebase', 'BLoC', 'REST API',
+    'WebSocket', 'Figma', 'Git', 'SQLite', 'Hive',
+    'Google Play', 'App Store',
+  ];
+
+  const projects = [
+    { name: 'INVAN POS', description: 'Enterprise POS on 100+ terminals. Tax integration, Payme/Click/Uzum, barcode scanning, thermal printing, daily reports.', img: null, isInternal: true },
+    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. 40,000+ downloads on both stores.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'INVAN MOBILE', description: 'Business management & inventory control. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
+    { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
+    { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
+    { name: 'CARINFOPRO', description: 'Scan car sticker → see owner contact. QR-based system for Uzbekistan roads.', img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
+    { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
+    { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
+    { name: 'VOCAB MASTER', description: 'English vocabulary learning with spaced repetition.', img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
+  ];
+
+  const contactLinks = [
+    { href: 'mailto:ayubxonahmadjonov43@gmail.com', Icon: Mail, label: 'Email', value: 'ayubxonahmadjonov43@gmail.com', color: '#f97316' },
+    { href: 'tel:+998887392122', Icon: Phone, label: 'Phone', value: '+998 88 739 21 22', color: '#22c55e' },
+    { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle, label: 'Telegram', value: '@ayyubxon_akhmadjonov', color: '#38bdf8' },
+    { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/ayyubxon-ahmadjonov', color: '#60a5fa' },
+    { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github, label: 'GitHub', value: 'github.com/ayyubxonahmadjonov', color: '#d1d5db' },
+    { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ahmadjonov_2122', color: '#f472b6' },
+  ];
+
+  const serviceCards = [
+    { Icon: Smartphone, title: 'Mobile Apps', desc: 'Cross-platform Flutter development for iOS & Android. Clean architecture, BLoC, Firebase.', color: ACCENT },
+    { Icon: Code2, title: 'Backend Integration', desc: 'RESTful APIs, WebSocket, Firebase Auth/Firestore, real-time data sync.', color: '#60a5fa' },
+    { Icon: BookOpen, title: 'Clean Architecture', desc: 'Feature-first folder structure, repository pattern, dependency injection.', color: '#34d399' },
+    { Icon: Briefcase, title: 'App Deployment', desc: 'Google Play & App Store publishing, versioning, signing, release management.', color: PURPLE },
+  ];
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: isMobile ? '16px' : '28px', fontFamily: "'Inter', sans-serif" }}>
-      <div style={{ width: '100%', maxWidth: '1240px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? '16px' : '24px', alignItems: 'flex-start' }}>
+    <div style={{
+      minHeight: '100vh',
+      background: `
+        radial-gradient(ellipse at 8% 15%, rgba(245,158,11,0.05) 0%, transparent 45%),
+        radial-gradient(ellipse at 92% 85%, rgba(168,85,247,0.05) 0%, transparent 45%),
+        #0d0d0d
+      `,
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      padding: isMobile ? '16px' : '28px',
+      fontFamily: "'DM Sans', 'Inter', sans-serif",
+    }}>
+      <div style={{
+        width: '100%', maxWidth: '1240px',
+        display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '16px' : '24px', alignItems: 'flex-start',
+      }}>
 
         {/* ── SIDEBAR ── */}
-        <aside style={{
-          width: isMobile ? '100%' : '300px',
-          flexShrink: 0,
-          backgroundColor: '#1e1e1e',
-          borderRadius: '20px',
-          border: '1px solid #2a2a2a',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          padding: isMobile ? '24px 20px' : '32px 22px',
-          display: 'flex',
-          flexDirection: 'column',
-          position: isMobile ? 'static' : 'sticky',
-          top: '28px',
-        }}>
+        <motion.aside
+          initial={{ opacity: 0, x: -24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.45 }}
+          style={{
+            width: isMobile ? '100%' : '300px',
+            flexShrink: 0,
+            backgroundColor: '#181818',
+            borderRadius: '20px',
+            border: '1px solid #242424',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.6)',
+            padding: isMobile ? '24px 20px' : '32px 22px',
+            display: 'flex', flexDirection: 'column',
+            position: isMobile ? 'static' : 'sticky',
+            top: '28px',
+          }}
+        >
+          {/* ── Profile ── */}
           {isMobile ? (
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '20px' }}>
-              <img src={profileImage} alt="Ayyubxon Ahmadjonov"
-                style={{ width: '90px', height: '90px', borderRadius: '14px', objectFit: 'cover', flexShrink: 0 }}
-              />
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: '90px', height: '90px', borderRadius: '16px', padding: '2px', background: `linear-gradient(135deg, ${ACCENT}, ${PURPLE})` }}>
+                  <img src={profileImage} alt="Ayyubxon"
+                    style={{ width: '100%', height: '100%', borderRadius: '14px', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+                <div style={{ position: 'absolute', bottom: '-3px', right: '-3px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: '#22c55e', border: '2px solid #181818' }} />
+              </div>
               <div>
                 <h1 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', marginBottom: '8px', fontFamily: "'DM Sans', sans-serif" }}>
                   Ayyubxon Ahmadjonov
                 </h1>
-                <span style={{ fontSize: '12px', color: '#d1d5db', padding: '5px 14px', borderRadius: '7px', backgroundColor: '#2a2a2a' }}>
+                <span style={{ fontSize: '12px', color: '#f0c070', padding: '5px 12px', borderRadius: '7px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.2)', fontWeight: 500 }}>
                   Flutter Developer
                 </span>
               </div>
@@ -115,358 +255,570 @@ export default function App() {
           ) : (
             <>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                <img src={profileImage} alt="Ayyubxon Ahmadjonov"
-                  style={{ width: '175px', height: '175px', borderRadius: '18px', objectFit: 'cover' }}
-                />
+                <div style={{ position: 'relative' }}>
+                  <div style={{ width: '175px', height: '175px', borderRadius: '22px', padding: '3px', background: `linear-gradient(135deg, ${ACCENT}, ${PURPLE})` }}>
+                    <img src={profileImage} alt="Ayyubxon"
+                      style={{ width: '100%', height: '100%', borderRadius: '20px', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                  <motion.div
+                    animate={{ opacity: [0.8, 1, 0.8] }}
+                    transition={{ duration: 2.5, repeat: Infinity }}
+                    style={{
+                      position: 'absolute', bottom: '6px', right: '-10px',
+                      display: 'flex', alignItems: 'center', gap: '5px',
+                      backgroundColor: '#181818', border: '1px solid #2e2e2e',
+                      borderRadius: '20px', padding: '5px 10px',
+                    }}
+                  >
+                    <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
+                    <span style={{ fontSize: '11px', color: '#86efac', fontWeight: 500 }}>Available</span>
+                  </motion.div>
+                </div>
               </div>
               <h1 style={{ fontSize: '21px', fontWeight: 700, textAlign: 'center', color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>
                 Ayyubxon Ahmadjonov
               </h1>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-                <span style={{ fontSize: '13px', color: '#d1d5db', padding: '7px 22px', borderRadius: '8px', backgroundColor: '#2a2a2a' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                <span style={{ fontSize: '13px', color: '#f0c070', padding: '7px 20px', borderRadius: '8px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.22)', fontWeight: 600 }}>
                   Flutter Developer
+                </span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+                <span style={{ fontSize: '12px', color: '#9ca3af', padding: '4px 14px', borderRadius: '6px', backgroundColor: '#222', border: '1px solid #2a2a2a' }}>
+                  @ Invan Soft, Tashkent
                 </span>
               </div>
             </>
           )}
 
-          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
+          <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, #2a2a2a, transparent)', marginBottom: '16px' }} />
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '8px',
-            marginBottom: '16px',
-          }}>
-            {[
-              { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com' },
-              { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22' },
-              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 8, 2008' },
-              { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan' },
-            ].map(({ Icon, label, value }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#252525', borderRadius: '10px', padding: '10px 12px', border: '1px solid #2e2e2e' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon style={{ width: '15px', height: '15px', color: accent }} />
+          {/* ── Contact info ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+            {([
+              { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com', copyKey: 'email' },
+              { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22', copyKey: 'phone' },
+              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 8, 2008', copyKey: null },
+              { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan', copyKey: null },
+            ] as { Icon: React.ElementType; label: string; value: string; copyKey: string | null }[]).map(({ Icon, label, value, copyKey }) => (
+              <div key={label} style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                backgroundColor: '#1e1e1e', borderRadius: '10px', padding: '10px 12px',
+                border: '1px solid #272727',
+              }}>
+                <div style={{
+                  width: '34px', height: '34px', borderRadius: '8px', flexShrink: 0,
+                  background: `linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.03))`,
+                  border: `1px solid rgba(245,158,11,0.15)`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon style={{ width: '15px', height: '15px', color: ACCENT }} />
                 </div>
-                <div style={{ overflow: 'hidden', minWidth: 0 }}>
-                  <p style={{ fontSize: '9px', color: '#6b7280', marginBottom: '1px', letterSpacing: '0.07em', fontWeight: 600 }}>{label}</p>
+                <div style={{ overflow: 'hidden', minWidth: 0, flex: 1 }}>
+                  <p style={{ fontSize: '9px', color: '#6b7280', marginBottom: '1px', letterSpacing: '0.08em', fontWeight: 600 }}>{label}</p>
                   <p style={{ fontSize: '11.5px', color: '#e5e7eb', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</p>
                 </div>
+                {copyKey && (
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
+                    onClick={() => copyToClipboard(value, copyKey)}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer', padding: '4px', flexShrink: 0,
+                      color: copiedKey === copyKey ? '#22c55e' : '#4b5563',
+                      transition: 'color 0.2s',
+                    }}
+                    title="Copy"
+                  >
+                    {copiedKey === copyKey
+                      ? <Check style={{ width: '14px', height: '14px' }} />
+                      : <Copy style={{ width: '14px', height: '14px' }} />}
+                  </motion.button>
+                )}
               </div>
             ))}
           </div>
 
-          <div style={{ height: '1px', backgroundColor: '#2a2a2a', marginBottom: '16px' }} />
+          <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, #2a2a2a, transparent)', marginBottom: '16px' }} />
 
-          {/* Social icons */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            {[
-              { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle },
-              { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram },
-              { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github },
-              { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin },
-            ].map(({ href, Icon }) => (
-              <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                style={{ color: '#6b7280', transition: 'color 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = accent)}
-                onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
+          {/* ── Social icons ── */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+            {([
+              { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle, label: 'Telegram' },
+              { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram' },
+              { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github, label: 'GitHub' },
+              { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin, label: 'LinkedIn' },
+            ] as { href: string; Icon: React.ElementType; label: string }[]).map(({ href, Icon, label }) => (
+              <motion.a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.15, y: -3 }}
+                whileTap={{ scale: 0.9 }}
+                title={label}
+                style={{
+                  width: '38px', height: '38px', borderRadius: '10px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: '#222', border: '1px solid #2a2a2a',
+                  color: '#6b7280', textDecoration: 'none', transition: 'color 0.2s, background-color 0.2s, border-color 0.2s',
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.color = ACCENT;
+                  el.style.backgroundColor = 'rgba(245,158,11,0.1)';
+                  el.style.borderColor = 'rgba(245,158,11,0.3)';
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.color = '#6b7280';
+                  el.style.backgroundColor = '#222';
+                  el.style.borderColor = '#2a2a2a';
+                }}
               >
-                <Icon style={{ width: '20px', height: '20px' }} />
-              </a>
+                <Icon style={{ width: '18px', height: '18px' }} />
+              </motion.a>
             ))}
           </div>
-        </aside>
+        </motion.aside>
 
-        {/* ── RIGHT CONTENT ── */}
-        <div style={{
-          flex: 1,
-          backgroundColor: '#1e1e1e',
-          borderRadius: '20px',
-          border: '1px solid #2a2a2a',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          minHeight: isMobile ? 'auto' : '600px',
-          width: isMobile ? '100%' : 'auto',
-        }}>
-
-          {/* Nav tabs */}
-          <nav style={{ borderBottom: '1px solid #2a2a2a', padding: isMobile ? '0 16px' : '0 32px', flexShrink: 0, overflowX: 'auto' }}>
+        {/* ── MAIN CONTENT ── */}
+        <motion.div
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          style={{
+            flex: 1,
+            backgroundColor: '#181818',
+            borderRadius: '20px',
+            border: '1px solid #242424',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.6)',
+            display: 'flex', flexDirection: 'column',
+            overflow: 'hidden',
+            minHeight: isMobile ? 'auto' : '600px',
+          }}
+        >
+          {/* ── Nav tabs ── */}
+          <nav style={{ borderBottom: '1px solid #202020', padding: isMobile ? '0 16px' : '0 32px', flexShrink: 0, overflowX: 'auto' }}>
             <div style={{ display: 'flex', gap: isMobile ? '4px' : '28px', minWidth: 'max-content' }}>
               {(['about', 'resume', 'portfolio', 'contact'] as TabType[]).map((tab) => (
-                <button key={tab} onClick={() => setActiveTab(tab)}
-                  style={{ position: 'relative', padding: isMobile ? '14px 12px 12px' : '20px 0 18px', fontSize: isMobile ? '13px' : '15px', fontWeight: 500, color: activeTab === tab ? accent : '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textTransform: 'capitalize', transition: 'color 0.2s', whiteSpace: 'nowrap' }}
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    position: 'relative',
+                    padding: isMobile ? '14px 12px 12px' : '20px 4px 18px',
+                    fontSize: isMobile ? '13px' : '15px',
+                    fontWeight: 500,
+                    color: activeTab === tab ? ACCENT : '#6b7280',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    textTransform: 'capitalize', transition: 'color 0.2s',
+                    whiteSpace: 'nowrap', fontFamily: "'DM Sans', sans-serif",
+                  }}
                 >
                   {tab}
-                  {activeTab === tab && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', backgroundColor: accent, borderRadius: '2px' }} />}
+                  {activeTab === tab && (
+                    <motion.div
+                      layoutId="tabUnderline"
+                      style={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px',
+                        background: `linear-gradient(to right, ${ACCENT}, #ef4444)`,
+                        borderRadius: '2px',
+                      }}
+                    />
+                  )}
                 </button>
               ))}
             </div>
           </nav>
 
-          {/* Content area */}
+          {/* ── Content area ── */}
           <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '20px 16px' : '36px' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                variants={TAB_VARIANTS}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.22 }}
+              >
 
-            {/* ── ABOUT ── */}
-            {activeTab === 'about' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '28px' : '40px' }}>
+                {/* ══ ABOUT ══ */}
+                {activeTab === 'about' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '32px' : '44px' }}>
 
-                <section>
-                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>About Me</h2>
-                  <div style={{ height: '3px', width: '44px', backgroundColor: accent, borderRadius: '2px', marginBottom: '16px' }} />
-                  <p style={{ color: '#d1d5db', lineHeight: 1.8, fontSize: isMobile ? '14px' : '15px', marginBottom: '12px' }}>
-                    I'm a Flutter Developer with nearly 1 year of experience building cross-platform mobile apps for both iOS and Android.
-                    Currently working full-time at Invan Soft, Tashkent — developing production-grade apps used by real businesses.
-                  </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', fontSize: isMobile ? '14px' : '15px', color: '#d1d5db' }}>
-                    <p>🚀 Building clean architecture Flutter apps since 2023.</p>
-                    <p>📱 10+ apps published on Google Play & App Store.</p>
-                    <p>🎯 Focused on performance, clean code, and great UX.</p>
+                    {/* About Me */}
+                    <section>
+                      <h2 style={{ fontSize: isMobile ? '24px' : '30px', fontWeight: 800, color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>
+                        About Me
+                      </h2>
+                      <div style={{ height: '3px', width: '48px', background: `linear-gradient(to right, ${ACCENT}, #ef4444)`, borderRadius: '2px', marginBottom: '18px' }} />
+                      <p style={{ color: '#d1d5db', lineHeight: 1.85, fontSize: isMobile ? '14px' : '15px', marginBottom: '14px' }}>
+                        I'm a Flutter Developer with nearly 1 year of experience building cross-platform mobile apps for iOS and Android.
+                        Currently working full-time at <span style={{ color: ACCENT, fontWeight: 600 }}>Invan Soft, Tashkent</span> — developing production-grade apps used by real businesses across Uzbekistan.
+                      </p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', fontSize: isMobile ? '14px' : '15px', color: '#c9d1db' }}>
+                        <p>🚀 Building clean architecture Flutter apps since 2023.</p>
+                        <p>📱 10+ apps published on Google Play & App Store.</p>
+                        <p>🎯 Focused on performance, clean code, and great UX.</p>
+                      </div>
+                    </section>
+
+                    {/* Stats */}
+                    <section>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <StatCard value={1} suffix="+" label="Years Exp." active={statsActive} />
+                        <StatCard value={10} suffix="+" label="Apps Published" active={statsActive} />
+                        <StatCard value={40} suffix="K+" label="Downloads" active={statsActive} />
+                        <StatCard value={9} suffix="" label="Projects" active={statsActive} />
+                      </div>
+                    </section>
+
+                    {/* What I'm Doing */}
+                    <section>
+                      <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>
+                        What I'm Doing
+                      </h2>
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
+                        {serviceCards.map(({ Icon, title, desc, color }) => (
+                          <motion.div
+                            key={title}
+                            whileHover={{ y: -4 }}
+                            style={{
+                              backgroundColor: '#1e1e1e', border: '1px solid #252525', borderRadius: '14px',
+                              padding: isMobile ? '16px' : '20px', display: 'flex', gap: '14px', alignItems: 'flex-start',
+                              transition: 'border-color 0.2s, box-shadow 0.2s',
+                            }}
+                            onMouseEnter={e => {
+                              const el = e.currentTarget as HTMLElement;
+                              el.style.borderColor = `${color}35`;
+                              el.style.boxShadow = `0 6px 24px ${color}10`;
+                            }}
+                            onMouseLeave={e => {
+                              const el = e.currentTarget as HTMLElement;
+                              el.style.borderColor = '#252525';
+                              el.style.boxShadow = 'none';
+                            }}
+                          >
+                            <div style={{
+                              width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              background: `linear-gradient(135deg, ${color}22, ${color}06)`,
+                              border: `1px solid ${color}28`,
+                            }}>
+                              <Icon style={{ width: '20px', height: '20px', color }} />
+                            </div>
+                            <div>
+                              <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '15px', marginBottom: '6px' }}>{title}</h3>
+                              <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.6 }}>{desc}</p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Tech Stack */}
+                    <section>
+                      <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>
+                        Tech Stack
+                      </h2>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {techStack.map((tech) => (
+                          <motion.span
+                            key={tech}
+                            whileHover={{ scale: 1.06, y: -2 }}
+                            style={{
+                              padding: '6px 14px', borderRadius: '8px',
+                              fontSize: '13px', fontWeight: 500,
+                              backgroundColor: '#1e1e1e', border: '1px solid #2a2a2a',
+                              color: '#d1d5db', cursor: 'default', display: 'inline-block',
+                            }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Skills */}
+                    <section>
+                      <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>
+                        My Skills
+                      </h2>
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px 40px' }}>
+                        {skills.map((s) => <SkillBar key={s.name} name={s.name} level={s.level} />)}
+                      </div>
+                    </section>
                   </div>
-                </section>
+                )}
 
-                <section>
-                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>What I'm Doing</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
-                    {[
-                      { Icon: Smartphone, title: 'Mobile Apps', desc: 'Professional Flutter development for iOS and Android. Clean architecture, BLoC state management, Firebase integration.' },
-                      { Icon: Code2, title: 'Backend Integration', desc: 'RESTful APIs, WebSocket, Firebase (Auth, Firestore, Push Notifications), real-time data sync.' },
-                      { Icon: BookOpen, title: 'Clean Architecture', desc: 'Feature-first folder structure, separation of concerns, repository pattern, dependency injection.' },
-                      { Icon: Briefcase, title: 'App Deployment', desc: 'Google Play Store and Apple App Store publishing, versioning, signing, and release management.' },
-                    ].map(({ Icon, title, desc }) => (
-                      <div key={title}
-                        style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: isMobile ? '16px' : '22px', display: 'flex', gap: '14px', alignItems: 'flex-start', transition: 'border-color 0.2s' }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(245,158,11,0.4)')}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = '#2e2e2e')}
+                {/* ══ RESUME ══ */}
+                {activeTab === 'resume' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <motion.a
+                        href={cvPdf}
+                        download="Ayyubxon_Ahmadjonov_CV.pdf"
+                        whileHover={{ scale: 1.04, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: '8px',
+                          background: `linear-gradient(135deg, ${ACCENT}, #f97316)`,
+                          color: '#000', padding: '10px 22px', borderRadius: '10px',
+                          fontSize: '14px', fontWeight: 700, textDecoration: 'none',
+                          boxShadow: `0 4px 20px rgba(245,158,11,0.35)`,
+                        }}
                       >
-                        <div style={{ width: '42px', height: '42px', borderRadius: '11px', backgroundColor: '#2e2e2e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Icon style={{ width: '20px', height: '20px', color: accent }} />
+                        <Download style={{ width: '16px', height: '16px' }} />
+                        Download CV
+                      </motion.a>
+                    </div>
+
+                    <section>
+                      <SectionHeader Icon={Briefcase} title="Work Experience" isMobile={isMobile} />
+                      <div style={{ position: 'relative', paddingLeft: '28px' }}>
+                        <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', background: `linear-gradient(to bottom, ${ACCENT}, ${PURPLE})` }} />
+
+                        <div style={{ position: 'relative', marginBottom: '32px' }}>
+                          <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: ACCENT, boxShadow: `0 0 12px ${ACCENT}70` }} />
+                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>Flutter Developer</h3>
+                            <span style={{ fontSize: '12px', color: ACCENT, backgroundColor: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', padding: '3px 10px', borderRadius: '6px', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                              Jun 2025 – Present
+                            </span>
+                          </div>
+                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft · Tashkent, Uzbekistan</p>
+                          <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            {[
+                              'Developed and maintained 5+ production mobile apps',
+                              'Built POS system: sales, discounts, barcode scanning, receipt printing',
+                              'Invan Mobile — inventory & business management app',
+                              'Tiin Loyalty — cashback & loyalty card app (40K+ downloads)',
+                              'Inventory Turnover — stock rotation analytics',
+                            ].map(item => (
+                              <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
+                                <span style={{ color: ACCENT, flexShrink: 0, marginTop: '1px' }}>▸</span><span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div style={{ position: 'relative' }}>
+                          <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: PURPLE, boxShadow: `0 0 12px ${PURPLE}70` }} />
+                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>Flutter Developer Intern</h3>
+                            <span style={{ fontSize: '12px', color: PURPLE, backgroundColor: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)', padding: '3px 10px', borderRadius: '6px', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                              Jun 2024 – May 2025
+                            </span>
+                          </div>
+                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft · Tashkent, Uzbekistan</p>
+                          <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            {[
+                              'Learned BLoC and Clean Architecture patterns',
+                              'Contributed to real production projects under senior guidance',
+                              'Completed Flutter & Dart Training Program',
+                            ].map(item => (
+                              <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
+                                <span style={{ color: PURPLE, flexShrink: 0, marginTop: '1px' }}>▸</span><span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section>
+                      <SectionHeader Icon={GraduationCap} title="Education" isMobile={isMobile} />
+                      <div style={{ position: 'relative', paddingLeft: '28px' }}>
+                        <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', background: `linear-gradient(to bottom, ${ACCENT}, ${PURPLE})` }} />
+                        {[
+                          { name: 'Invan Soft', sub: 'Flutter & Dart Training Program', period: '2023 – 2024', extra: 'Mobile Development Practical Course' },
+                          { name: 'Vocational School No.1, Fergana', sub: 'IT Specialization', period: '2024 – 2026', extra: '2nd year student' },
+                          { name: 'Everest Language Learning Center', sub: 'English Language Program', period: 'IELTS Band 6.0', extra: undefined },
+                        ].map(({ name, sub, period, extra }, i) => (
+                          <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '28px' : 0 }}>
+                            <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: ACCENT, boxShadow: `0 0 10px ${ACCENT}55` }} />
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                              <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>{name}</h3>
+                              <span style={{ fontSize: '12px', color: ACCENT, backgroundColor: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', padding: '3px 10px', borderRadius: '6px', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                                {period}
+                              </span>
+                            </div>
+                            <p style={{ fontSize: '13px', color: '#d1d5db' }}>{sub}{extra ? ` — ${extra}` : ''}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section>
+                      <SectionHeader Icon={Code2} title="Skills" isMobile={isMobile} />
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px 40px' }}>
+                        {skills.map((s) => <SkillBar key={s.name} name={s.name} level={s.level} />)}
+                      </div>
+                    </section>
+                  </div>
+                )}
+
+                {/* ══ PORTFOLIO ══ */}
+                {activeTab === 'portfolio' && (
+                  <div>
+                    <div style={{ marginBottom: '26px' }}>
+                      <h2 style={{ fontSize: isMobile ? '24px' : '30px', fontWeight: 800, color: '#fff', marginBottom: '6px', fontFamily: "'DM Sans', sans-serif" }}>
+                        Portfolio
+                      </h2>
+                      <p style={{ color: '#6b7280', fontSize: '14px' }}>
+                        {projects.length} apps — published on Google Play & App Store
+                      </p>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: '12px' }}>
+                      {projects.map((project, i) => (
+                        <motion.div
+                          key={project.name}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: i * 0.05 }}
+                          whileHover={{ y: -5 }}
+                          style={{
+                            backgroundColor: '#1e1e1e', border: '1px solid #252525', borderRadius: '14px',
+                            padding: isMobile ? '14px' : '18px', display: 'flex', flexDirection: 'column',
+                            transition: 'border-color 0.2s, box-shadow 0.2s',
+                          }}
+                          onMouseEnter={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.borderColor = 'rgba(245,158,11,0.35)';
+                            el.style.boxShadow = '0 8px 28px rgba(245,158,11,0.08)';
+                          }}
+                          onMouseLeave={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.borderColor = '#252525';
+                            el.style.boxShadow = 'none';
+                          }}
+                        >
+                          <div style={{
+                            width: '52px', height: '52px', borderRadius: '14px', overflow: 'hidden',
+                            marginBottom: '12px', backgroundColor: '#252525', border: '1px solid #2e2e2e',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                          }}>
+                            {project.img
+                              ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              : <span style={{ fontSize: '22px', fontWeight: 800, background: `linear-gradient(135deg, ${ACCENT}, #ef4444)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>P</span>
+                            }
+                          </div>
+                          <h3 style={{ fontSize: isMobile ? '11px' : '13px', fontWeight: 700, color: '#fff', marginBottom: '6px', lineHeight: 1.3 }}>{project.name}</h3>
+                          <p style={{ fontSize: isMobile ? '10px' : '12px', color: '#9ca3af', lineHeight: 1.55, marginBottom: '12px', flex: 1 }}>{project.description}</p>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: 'auto' }}>
+                            {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
+                            {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
+                            {project.isInternal && (
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#222', borderRadius: '8px', padding: '7px', fontSize: '11px', color: '#9ca3af', border: '1px solid #2a2a2a' }}>
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#60a5fa', flexShrink: 0 }} />
+                                Internal Product
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* ══ CONTACT ══ */}
+                {activeTab === 'contact' && (
+                  <div style={{ maxWidth: '580px' }}>
+                    <div style={{ marginBottom: '20px' }}>
+                      <motion.span
+                        animate={{ opacity: [0.75, 1, 0.75] }}
+                        transition={{ duration: 2.5, repeat: Infinity }}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: '8px',
+                          backgroundColor: 'rgba(34,197,94,0.1)',
+                          padding: '6px 16px', borderRadius: '999px',
+                          fontSize: '12px', color: '#86efac',
+                          border: '1px solid rgba(34,197,94,0.22)', fontWeight: 500,
+                        }}
+                      >
+                        <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
+                        Open to work
+                      </motion.span>
+                    </div>
+                    <h2 style={{ fontSize: isMobile ? '24px' : '32px', fontWeight: 800, color: '#fff', marginBottom: '8px', fontFamily: "'DM Sans', sans-serif" }}>
+                      Let's Work Together
+                    </h2>
+                    <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '26px', lineHeight: 1.65 }}>
+                      Have a project in mind? I'd love to hear about it. Reach out via any channel below.
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {contactLinks.map(({ href, Icon, label, value, color }) => (
+                        <motion.a
+                          key={href}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ x: 5 }}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '14px',
+                            backgroundColor: '#1e1e1e', border: '1px solid #252525',
+                            borderRadius: '12px', padding: '14px 16px',
+                            textDecoration: 'none', transition: 'border-color 0.2s, background-color 0.2s',
+                          }}
+                          onMouseEnter={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.borderColor = `${color}40`;
+                            el.style.backgroundColor = `${color}09`;
+                          }}
+                          onMouseLeave={e => {
+                            const el = e.currentTarget as HTMLElement;
+                            el.style.borderColor = '#252525';
+                            el.style.backgroundColor = '#1e1e1e';
+                          }}
+                        >
+                          <div style={{
+                            width: '42px', height: '42px', borderRadius: '10px', flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: `linear-gradient(135deg, ${color}20, ${color}07)`,
+                            border: `1px solid ${color}28`,
+                          }}>
+                            <Icon style={{ width: '18px', height: '18px', color }} />
+                          </div>
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <p style={{ fontSize: '10px', color: '#6b7280', marginBottom: '2px', fontWeight: 600, letterSpacing: '0.07em' }}>{label.toUpperCase()}</p>
+                            <p style={{ fontSize: isMobile ? '13px' : '14px', color: '#e5e7eb', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</p>
+                          </div>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4b5563" strokeWidth="2" style={{ flexShrink: 0 }}>
+                            <path d="M7 17L17 7M17 7H7M17 7v10" />
+                          </svg>
+                        </motion.a>
+                      ))}
+
+                      {/* Location */}
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: '14px',
+                        backgroundColor: '#1e1e1e', border: '1px solid #252525',
+                        borderRadius: '12px', padding: '14px 16px',
+                      }}>
+                        <div style={{
+                          width: '42px', height: '42px', borderRadius: '10px', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: `linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.05))`,
+                          border: `1px solid rgba(245,158,11,0.22)`,
+                        }}>
+                          <MapPin style={{ width: '18px', height: '18px', color: ACCENT }} />
                         </div>
                         <div>
-                          <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '15px', marginBottom: '6px' }}>{title}</h3>
-                          <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.6 }}>{desc}</p>
+                          <p style={{ fontSize: '10px', color: '#6b7280', marginBottom: '2px', fontWeight: 600, letterSpacing: '0.07em' }}>LOCATION</p>
+                          <p style={{ fontSize: isMobile ? '13px' : '14px', color: '#e5e7eb' }}>Fergana, Uzbekistan</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </section>
-
-                <section>
-                  <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>My Skills</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '14px 40px' }}>
-                    {skills.map(skill => (
-                      <div key={skill.name}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '14px', color: '#d1d5db', fontWeight: 500 }}>{skill.name}</span>
-                          <span style={{ fontSize: '13px', color: accent }}>{skill.level}%</span>
-                        </div>
-                        <div style={{ height: '6px', backgroundColor: '#2a2a2a', borderRadius: '999px', overflow: 'hidden' }}>
-                          <div style={{ width: `${skill.level}%`, height: '100%', background: `linear-gradient(to right, ${accent}, #ef4444)`, borderRadius: '999px' }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {/* ── RESUME ── */}
-            {activeTab === 'resume' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-
-                {/* ── Download CV Button ── */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <a
-                    href={cvPdf}
-                    download="Ayyubxon_Ahmadjonov_CV.pdf"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      backgroundColor: accent,
-                      color: '#000',
-                      padding: '10px 20px',
-                      borderRadius: '10px',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                      transition: 'opacity 0.2s',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-                  >
-                    <Download style={{ width: '16px', height: '16px' }} />
-                    Download CV
-                  </a>
-                </div>
-
-                <section>
-                  <SectionHeader Icon={Briefcase} title="Work" />
-                  <div style={{ position: 'relative', paddingLeft: '28px' }}>
-                    <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#2e2e2e' }} />
-
-                    <div style={{ position: 'relative', marginBottom: '28px' }}>
-                      <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
-                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '3px' }}>Flutter Developer</h3>
-                      <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>Jun 2025 – Present</p>
-                      <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft, Tashkent</p>
-                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        {[
-                          'Developed and maintained 5+ production mobile apps',
-                          'Built POS system: sales, discounts, barcode scanning, receipt printing',
-                          'Invan Mobile — inventory & business management app',
-                          'Tiin Loyalty — cashback & loyalty card app for supermarkets',
-                          'Inventory Turnover — stock rotation analytics',
-                        ].map(item => (
-                          <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
-                            <span style={{ color: accent, flexShrink: 0 }}>•</span><span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                      <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#a855f7' }} />
-                      <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '3px' }}>Flutter Developer Intern</h3>
-                      <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>Jun 2024 – May 2025</p>
-                      <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft, Tashkent</p>
-                      <ul style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        {[
-                          'Learned BLoC and Clean Architecture patterns',
-                          'Contributed to real production projects under senior guidance',
-                          'Completed Flutter & Dart Training Program',
-                        ].map(item => (
-                          <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
-                            <span style={{ color: '#a855f7', flexShrink: 0 }}>•</span><span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
                     </div>
                   </div>
-                </section>
+                )}
 
-                <section>
-                  <SectionHeader Icon={GraduationCap} title="Education" />
-                  <div style={{ position: 'relative', paddingLeft: '28px', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#2e2e2e' }} />
-                    {[
-                      { name: 'Invan Soft', sub: 'Flutter & Dart Training', period: '2023 – 2024', extra: 'Mobile Development Practical Course' },
-                      { name: 'Vocational School No.1, Fergana', sub: 'IT Specialization', period: '2024 – 2026', extra: '2nd year student' },
-                      { name: 'Everest Language Learning Center', sub: 'English Language Program', period: 'IELTS Band 6.0', extra: undefined },
-                    ].map(({ name, sub, period, extra }, i) => (
-                      <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '24px' : '0' }}>
-                        <div style={{ position: 'absolute', left: '-22px', top: '6px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: accent }} />
-                        <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px', marginBottom: '2px' }}>{name}</h3>
-                        <p style={{ fontSize: '13px', color: accent, marginBottom: '2px' }}>{period}</p>
-                        <p style={{ fontSize: '13px', color: '#d1d5db' }}>{sub}{extra ? ` — ${extra}` : ''}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                <section>
-                  <SectionHeader Icon={Code2} title="My Skills" />
-                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px 40px' }}>
-                    {skills.map(skill => (
-                      <div key={skill.name}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                          <span style={{ fontSize: '13px', color: '#d1d5db', fontWeight: 500 }}>{skill.name}</span>
-                          <span style={{ fontSize: '12px', color: accent }}>{skill.level}%</span>
-                        </div>
-                        <div style={{ height: '5px', backgroundColor: '#2a2a2a', borderRadius: '999px', overflow: 'hidden' }}>
-                          <div style={{ width: `${skill.level}%`, height: '100%', background: `linear-gradient(to right, ${accent}, #ef4444)`, borderRadius: '999px' }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {/* ── PORTFOLIO ── */}
-            {activeTab === 'portfolio' && (
-              <div>
-                <h2 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight: 700, color: '#fff', marginBottom: '20px', fontFamily: "'DM Sans', sans-serif" }}>Portfolio</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: '12px' }}>
-                  {projects.map((project) => (
-                    <div key={project.name}
-                      style={{ backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '14px', padding: isMobile ? '14px' : '20px', transition: 'all 0.2s' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.5)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#2e2e2e'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                    >
-                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', overflow: 'hidden', marginBottom: '10px', backgroundColor: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {project.img
-                          ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          : <span style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>P</span>
-                        }
-                      </div>
-                      <h3 style={{ fontSize: isMobile ? '11px' : '13px', fontWeight: 700, color: '#fff', marginBottom: '5px' }}>{project.name}</h3>
-                      <p style={{ fontSize: isMobile ? '10px' : '12px', color: '#9ca3af', lineHeight: 1.5, marginBottom: '10px' }}>{project.description}</p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
-                        {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
-                        {project.isInternal && (
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#2a2a2a', borderRadius: '8px', padding: '6px', fontSize: '11px', color: '#6b7280' }}>
-                            Internal Product
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ── CONTACT ── */}
-            {activeTab === 'contact' && (
-              <div style={{ maxWidth: '580px' }}>
-                <div style={{ marginBottom: '16px' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(34,197,94,0.15)', padding: '6px 14px', borderRadius: '999px', fontSize: '12px', color: '#86efac', border: '1px solid rgba(34,197,94,0.25)' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
-                    Open to work
-                  </span>
-                </div>
-                <h2 style={{ fontSize: isMobile ? '22px' : '30px', fontWeight: 700, color: '#fff', marginBottom: '20px', fontFamily: "'DM Sans', sans-serif" }}>Let's Work Together</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {[
-                    { href: 'mailto:ayubxonahmadjonov43@gmail.com', Icon: Mail, label: 'Email', value: 'ayubxonahmadjonov43@gmail.com' },
-                    { href: 'tel:+998887392122', Icon: Phone, label: 'Phone', value: '+998 88 739 21 22' },
-                    { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle, label: 'Telegram', value: '@ayyubxon_akhmadjonov' },
-                    { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/ayyubxon-ahmadjonov' },
-                    { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github, label: 'GitHub', value: 'github.com/ayyubxonahmadjonov' },
-                    { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ahmadjonov_2122' },
-                  ].map(({ href, Icon, label, value }) => (
-                    <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '12px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.5)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#2e2e2e'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                    >
-                      <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Icon style={{ width: '18px', height: '18px', color: accent }} />
-                      </div>
-                      <div style={{ minWidth: 0 }}>
-                        <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '2px' }}>{label}</p>
-                        <p style={{ fontSize: isMobile ? '13px' : '15px', color: '#e5e7eb', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</p>
-                      </div>
-                    </a>
-                  ))}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#252525', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '12px 16px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <MapPin style={{ width: '18px', height: '18px', color: accent }} />
-                    </div>
-                    <div>
-                      <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '2px' }}>Location</p>
-                      <p style={{ fontSize: isMobile ? '13px' : '15px', color: '#e5e7eb' }}>Fergana, Uzbekistan</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
+              </motion.div>
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
