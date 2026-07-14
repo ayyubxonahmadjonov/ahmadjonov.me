@@ -5,7 +5,7 @@ import {
   Code2, MessageCircle, Linkedin, Instagram, Github,
   BookOpen, Smartphone, Calendar, Download, Copy, Check,
 } from 'lucide-react';
-import profileImage from "../assets/profile_image.png";
+import profileImage from "../assets/profile_image.jpg";
 import tiinImg from "../assets/tiin.png";
 import invanImg from "../assets/invan.png";
 import carinfoproImg from "../assets/carinfopro.jpg";
@@ -66,20 +66,30 @@ function StoreBtn({ href, type }: { href: string; type: 'play' | 'apple' }) {
   );
 }
 
-function SkillBar({ name, level }: { name: string; level: number }) {
+function SkillGroup({ category, items, color }: { category: string; items: string[]; color: string }) {
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '7px' }}>
-        <span style={{ fontSize: '14px', color: '#d1d5db', fontWeight: 500 }}>{name}</span>
-        <span style={{ fontSize: '13px', color: ACCENT, fontWeight: 600 }}>{level}%</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '13px' }}>
+        <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: color, boxShadow: `0 0 9px ${color}` }} />
+        <span style={{ fontSize: '12px', color: '#9ca3af', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          {category}
+        </span>
       </div>
-      <div style={{ height: '6px', backgroundColor: '#252525', borderRadius: '999px', overflow: 'hidden' }}>
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${level}%` }}
-          transition={{ duration: 1, ease: 'easeOut', delay: 0.1 }}
-          style={{ height: '100%', background: `linear-gradient(to right, ${ACCENT}, #ef4444)`, borderRadius: '999px' }}
-        />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        {items.map((item) => (
+          <motion.span
+            key={item}
+            whileHover={{ scale: 1.06, y: -2 }}
+            style={{
+              padding: '6px 14px', borderRadius: '8px',
+              fontSize: '13px', fontWeight: 500,
+              backgroundColor: '#1e1e1e', border: `1px solid ${color}33`,
+              color: '#e5e7eb', cursor: 'default', display: 'inline-block',
+            }}
+          >
+            {item}
+          </motion.span>
+        ))}
       </div>
     </div>
   );
@@ -151,15 +161,14 @@ export default function App() {
     });
   };
 
-  const skills = [
-    { name: 'Flutter / Dart', level: 90 },
-    { name: 'BLoC / Cubit / Provider', level: 85 },
-    { name: 'Firebase', level: 85 },
-    { name: 'RESTful APIs / WebSocket', level: 80 },
-    { name: 'UI/UX (Figma → Flutter)', level: 80 },
-    { name: 'SQLite / Hive / Shared Prefs', level: 75 },
-    { name: 'Google Play & App Store', level: 90 },
-    { name: 'English (IELTS 6.0)', level: 65 },
+  const skillGroups = [
+    { category: 'Mobile Development', color: ACCENT, items: ['Flutter', 'Dart', 'Clean Architecture', 'Responsive UI'] },
+    { category: 'State Management', color: '#60a5fa', items: ['BLoC', 'Cubit', 'Provider'] },
+    { category: 'Backend & Data', color: '#22c55e', items: ['Firebase', 'REST API', 'WebSocket', 'SQLite', 'Hive', 'Shared Prefs'] },
+    { category: 'AI-Assisted Development', color: PURPLE, items: ['Claude Code', 'ChatGPT', 'Prompt Engineering', 'AI Pair Programming'] },
+    { category: 'Design & Tools', color: '#ec4899', items: ['Figma', 'UI/UX', 'Git'] },
+    { category: 'Publishing', color: ACCENT, items: ['Google Play', 'App Store'] },
+    { category: 'Languages', color: '#60a5fa', items: ['English (IELTS 6.0)'] },
   ];
 
   const techStack = [
@@ -546,8 +555,8 @@ export default function App() {
                       <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>
                         My Skills
                       </h2>
-                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px 40px' }}>
-                        {skills.map((s) => <SkillBar key={s.name} name={s.name} level={s.level} />)}
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '26px 40px' }}>
+                        {skillGroups.map((g) => <SkillGroup key={g.category} category={g.category} items={g.items} color={g.color} />)}
                       </div>
                     </section>
                   </div>
@@ -654,8 +663,8 @@ export default function App() {
 
                     <section>
                       <SectionHeader Icon={Code2} title="Skills" isMobile={isMobile} />
-                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px 40px' }}>
-                        {skills.map((s) => <SkillBar key={s.name} name={s.name} level={s.level} />)}
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '26px 40px' }}>
+                        {skillGroups.map((g) => <SkillGroup key={g.category} category={g.category} items={g.items} color={g.color} />)}
                       </div>
                     </section>
                   </div>
