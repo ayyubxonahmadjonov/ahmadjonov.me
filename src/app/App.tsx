@@ -178,7 +178,7 @@ export default function App() {
   ];
 
   const projects = [
-    { name: 'INVAN POS', description: 'Enterprise POS on 100+ terminals. Tax integration, Payme/Click/Uzum, barcode scanning, thermal printing, daily reports.', img: null, isInternal: true },
+    { name: 'INVAN POS', description: 'Flagship enterprise POS for Windows desktop (Flutter), live on 100+ retail terminals. Real-time WebSocket sync, fiscal receipts & Z-reports with Soliq (tax) integration, Payme/Click/Uzum payments, barcode scanning, a full discount & returns engine, receipt printing and Excel/PDF reporting.', img: null, isInternal: true },
     { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. 40,000+ downloads on both stores.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
     { name: 'INVAN MOBILE', description: 'Business management & inventory control. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
     { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
