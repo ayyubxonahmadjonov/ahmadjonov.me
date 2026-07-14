@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Mail, Phone, MapPin, Briefcase, GraduationCap,
   Code2, MessageCircle, Linkedin, Instagram, Github,
-  BookOpen, Smartphone, Calendar, Download, Copy, Check, Globe,
+  BookOpen, Smartphone, Calendar, Download, Copy, Check, Globe, X,
 } from 'lucide-react';
 import profileImage from "../assets/profile_image.jpg";
 import tiinImg from "../assets/tiin.png";
@@ -95,6 +95,107 @@ function SkillGroup({ category, items, color }: { category: string; items: strin
   );
 }
 
+function ProjectModal({ project, onClose, isMobile, labels }: { project: any; onClose: () => void; isMobile: boolean; labels: { builtWith: string; visit: string; internal: string } }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: isMobile ? '16px' : '32px',
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 8 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        style={{
+          width: '100%', maxWidth: '560px', maxHeight: '88vh', overflowY: 'auto',
+          backgroundColor: '#161616', border: '1px solid #2a2a2a', borderRadius: '20px',
+          padding: isMobile ? '22px' : '30px', position: 'relative',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.7)',
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            position: 'absolute', top: '16px', right: '16px',
+            width: '32px', height: '32px', borderRadius: '9px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backgroundColor: '#222', border: '1px solid #2e2e2e',
+            color: '#9ca3af', cursor: 'pointer',
+          }}
+        >
+          <X style={{ width: '16px', height: '16px' }} />
+        </button>
+
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '20px', paddingRight: '32px' }}>
+          <div style={{
+            width: '60px', height: '60px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0,
+            backgroundColor: '#252525', border: '1px solid #2e2e2e',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {project.img
+              ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <span style={{ fontSize: '26px', fontWeight: 800, background: `linear-gradient(135deg, ${ACCENT}, #ef4444)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>P</span>}
+          </div>
+          <div>
+            <h3 style={{ fontSize: isMobile ? '18px' : '21px', fontWeight: 800, color: '#fff', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.2 }}>{project.name}</h3>
+            {project.category && (
+              <span style={{ display: 'inline-block', marginTop: '6px', fontSize: '11px', fontWeight: 600, color: '#f0c070', letterSpacing: '0.04em', padding: '3px 10px', borderRadius: '6px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.22)' }}>{project.category}</span>
+            )}
+          </div>
+        </div>
+
+        <p style={{ fontSize: isMobile ? '14px' : '15px', color: '#c9d1db', lineHeight: 1.75, marginBottom: '22px' }}>{project.description}</p>
+
+        {project.tech && project.tech.length > 0 && (
+          <div style={{ marginBottom: '22px' }}>
+            <p style={{ fontSize: '11px', color: '#6b7280', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '11px' }}>{labels.builtWith}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {project.tech.map((t: string) => (
+                <span key={t} style={{ fontSize: '13px', fontWeight: 500, color: '#e5e7eb', padding: '6px 13px', borderRadius: '8px', backgroundColor: '#1e1e1e', border: '1px solid #2a2a2a' }}>{t}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
+          {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
+          {project.webUrl && (
+            <motion.a
+              href={project.webUrl} target="_blank" rel="noopener noreferrer"
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                background: 'rgba(245,158,11,0.12)', borderRadius: '8px', padding: '8px 14px',
+                fontSize: '13px', color: '#f0c070', textDecoration: 'none',
+                border: '1px solid rgba(245,158,11,0.25)', fontWeight: 600,
+              }}
+            >
+              <Globe style={{ width: '14px', height: '14px', flexShrink: 0 }} />
+              {labels.visit}
+            </motion.a>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function SectionHeader({ Icon, title, isMobile }: { Icon: React.ElementType; title: string; isMobile: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
@@ -140,6 +241,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [statsActive, setStatsActive] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
@@ -178,15 +280,15 @@ export default function App() {
   ];
 
   const projects = [
-    { name: 'INVAN POS', description: 'A store-automation system (POS) for retail shops & supermarkets — it runs the whole checkout counter: scanning products, taking cash & Payme/Click/Uzum payments, printing fiscal receipts, and managing discounts, returns and sales reports. A Windows desktop app (Flutter) with real-time sync, live on 100+ terminals.', img: null, isInternal: true, webUrl: 'https://invan.uz' },
-    { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. 40,000+ downloads on both stores.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
-    { name: 'INVAN MOBILE', description: 'Business management & inventory control. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
-    { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
-    { name: 'STROY BAZA N1', description: 'Construction materials marketplace app.', img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
-    { name: 'CARINFOPRO', description: 'Scan car sticker → see owner contact. QR-based system for Uzbekistan roads.', img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
-    { name: 'DICTIONARY EVEREST', description: 'Smart Uzbek-English dictionary with fast search.', img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
-    { name: 'TIC TAC TOE INFINITY', description: 'Multiplayer Tic Tac Toe with infinite board & AI opponent.', img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
-    { name: 'VOCAB MASTER', description: 'English vocabulary learning with spaced repetition.', img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
+    { name: 'INVAN POS', category: 'Retail / POS', description: 'A store-automation system (POS) for retail shops & supermarkets — it runs the whole checkout counter: scanning products, taking cash & Payme/Click/Uzum payments, printing fiscal receipts, and managing discounts, returns and sales reports. A Windows desktop app (Flutter) with real-time sync, live on 100+ terminals.', tech: ['Flutter', 'Windows Desktop', 'WebSocket', 'REST API', 'Provider', 'ObjectBox', 'Fiscal API'], img: null, isInternal: true, webUrl: 'https://invan.uz' },
+    { name: 'TIIN LOYALTY', category: 'Fintech / Loyalty', description: 'Cashback & loyalty card app for supermarkets — customers collect cashback and store their loyalty cards in one place. 40,000+ downloads across Google Play and the App Store.', tech: ['Flutter', 'Firebase', 'REST API', 'BLoC'], img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'INVAN MOBILE', category: 'Business / Inventory', description: 'Business management & inventory-control app — real-time sales tracking, stock management and reports for shop owners on the go.', tech: ['Flutter', 'REST API', 'Provider', 'WebSocket'], img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
+    { name: 'SAJDA MOBILE', category: 'Lifestyle / Islamic', description: 'Islamic prayer companion — accurate prayer times, Qibla direction compass and Azan alerts based on the user’s location.', tech: ['Flutter', 'Geolocation', 'Local Notifications', 'REST API'], img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
+    { name: 'STROY BAZA N1', category: 'Marketplace', description: 'Construction-materials marketplace — browse products, prices and suppliers of building materials in one app.', tech: ['Flutter', 'REST API', 'BLoC'], img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
+    { name: 'CARINFOPRO', category: 'Utility / QR', description: 'Scan a car’s QR sticker to reach the owner without sharing a phone number — a privacy-friendly contact system for Uzbekistan’s roads.', tech: ['Flutter', 'QR Scanner', 'REST API', 'Firebase'], img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
+    { name: 'DICTIONARY EVEREST', category: 'Education', description: 'A smart Uzbek–English dictionary with fast offline search and a clean, distraction-free interface.', tech: ['Flutter', 'SQLite', 'Offline'], img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
+    { name: 'TIC TAC TOE INFINITY', category: 'Game', description: 'A modern twist on Tic Tac Toe with an infinite board, local multiplayer and an AI opponent.', tech: ['Flutter', 'Game Logic', 'AI Opponent'], img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
+    { name: 'VOCAB MASTER', category: 'Education', description: 'Learn English vocabulary efficiently with a spaced-repetition system that shows words right before you forget them.', tech: ['Flutter', 'Hive', 'Spaced Repetition'], img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
   ];
 
   const contactLinks = [
@@ -705,18 +807,29 @@ export default function App() {
                             el.style.boxShadow = 'none';
                           }}
                         >
-                          <div style={{
-                            width: '52px', height: '52px', borderRadius: '14px', overflow: 'hidden',
-                            marginBottom: '12px', backgroundColor: '#252525', border: '1px solid #2e2e2e',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                          }}>
-                            {project.img
-                              ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                              : <span style={{ fontSize: '22px', fontWeight: 800, background: `linear-gradient(135deg, ${ACCENT}, #ef4444)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>P</span>
-                            }
+                          <div
+                            onClick={() => setSelectedProject(i)}
+                            style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', flex: 1 }}
+                          >
+                            <div style={{
+                              width: '52px', height: '52px', borderRadius: '14px', overflow: 'hidden',
+                              marginBottom: '12px', backgroundColor: '#252525', border: '1px solid #2e2e2e',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                            }}>
+                              {project.img
+                                ? <img src={project.img} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                : <span style={{ fontSize: '22px', fontWeight: 800, background: `linear-gradient(135deg, ${ACCENT}, #ef4444)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>P</span>
+                              }
+                            </div>
+                            <h3 style={{ fontSize: isMobile ? '11px' : '13px', fontWeight: 700, color: '#fff', marginBottom: '6px', lineHeight: 1.3 }}>{project.name}</h3>
+                            <p style={{
+                              fontSize: isMobile ? '10px' : '12px', color: '#9ca3af', lineHeight: 1.55, marginBottom: '10px', flex: 1,
+                              display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                            }}>{project.description}</p>
+                            <span style={{ fontSize: '11px', color: ACCENT, fontWeight: 600, marginBottom: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              View details →
+                            </span>
                           </div>
-                          <h3 style={{ fontSize: isMobile ? '11px' : '13px', fontWeight: 700, color: '#fff', marginBottom: '6px', lineHeight: 1.3 }}>{project.name}</h3>
-                          <p style={{ fontSize: isMobile ? '10px' : '12px', color: '#9ca3af', lineHeight: 1.55, marginBottom: '12px', flex: 1 }}>{project.description}</p>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: 'auto' }}>
                             {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
                             {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
@@ -847,6 +960,17 @@ export default function App() {
           </div>
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {selectedProject !== null && (
+          <ProjectModal
+            project={projects[selectedProject]}
+            onClose={() => setSelectedProject(null)}
+            isMobile={isMobile}
+            labels={{ builtWith: 'Built with', visit: 'Visit website', internal: 'Internal Product' }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
