@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Mail, Phone, MapPin, Briefcase, GraduationCap,
   Code2, MessageCircle, Linkedin, Instagram, Github,
-  BookOpen, Smartphone, Calendar, Download, Copy, Check,
+  BookOpen, Smartphone, Calendar, Download, Copy, Check, Globe,
 } from 'lucide-react';
 import profileImage from "../assets/profile_image.jpg";
 import tiinImg from "../assets/tiin.png";
@@ -178,7 +178,7 @@ export default function App() {
   ];
 
   const projects = [
-    { name: 'INVAN POS', description: 'Flagship enterprise POS for Windows desktop (Flutter), live on 100+ retail terminals. Real-time WebSocket sync, fiscal receipts & Z-reports with Soliq (tax) integration, Payme/Click/Uzum payments, barcode scanning, a full discount & returns engine, receipt printing and Excel/PDF reporting.', img: null, isInternal: true },
+    { name: 'INVAN POS', description: 'A store-automation system (POS) for retail shops & supermarkets — it runs the whole checkout counter: scanning products, taking cash & Payme/Click/Uzum payments, printing fiscal receipts, and managing discounts, returns and sales reports. A Windows desktop app (Flutter) with real-time sync, live on 100+ terminals.', img: null, isInternal: true, webUrl: 'https://invan.uz' },
     { name: 'TIIN LOYALTY', description: 'Cashback & loyalty cards for supermarkets. 40,000+ downloads on both stores.', img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
     { name: 'INVAN MOBILE', description: 'Business management & inventory control. Sales tracking, stock management, reports.', img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
     { name: 'SAJDA MOBILE', description: 'Islamic prayer times, Qibla direction, Azan alerts.', img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
@@ -720,7 +720,25 @@ export default function App() {
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: 'auto' }}>
                             {project.googlePlayUrl && <StoreBtn href={project.googlePlayUrl} type="play" />}
                             {project.appStoreUrl && <StoreBtn href={project.appStoreUrl} type="apple" />}
-                            {project.isInternal && (
+                            {project.webUrl && (
+                              <motion.a
+                                href={project.webUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                style={{
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                  background: 'rgba(245,158,11,0.12)', borderRadius: '8px', padding: '7px 10px',
+                                  fontSize: '12px', color: '#f0c070', textDecoration: 'none',
+                                  border: '1px solid rgba(245,158,11,0.25)', fontWeight: 600,
+                                }}
+                              >
+                                <Globe style={{ width: '13px', height: '13px', flexShrink: 0 }} />
+                                invan.uz
+                              </motion.a>
+                            )}
+                            {project.isInternal && !project.webUrl && (
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#222', borderRadius: '8px', padding: '7px', fontSize: '11px', color: '#9ca3af', border: '1px solid #2a2a2a' }}>
                                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#60a5fa', flexShrink: 0 }} />
                                 Internal Product
