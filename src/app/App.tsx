@@ -15,6 +15,7 @@ import stroybazaImg from "../assets/stroybaza.jpg";
 import tictactoeImg from "../assets/tictactoe.png";
 import vocabmasterImg from "../assets/vocabmaster.jpg";
 import cvPdf from "../assets/ayyubxon_ahmadjonov_cv.pdf";
+import { translations, LANGS, type Lang } from "./i18n";
 
 type TabType = 'about' | 'resume' | 'portfolio' | 'contact';
 
@@ -242,6 +243,18 @@ export default function App() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [statsActive, setStatsActive] = useState(false);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [lang, setLang] = useState<Lang>(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (fromUrl === 'en' || fromUrl === 'ru' || fromUrl === 'uz') return fromUrl;
+    return (localStorage.getItem('lang') as Lang) || 'en';
+  });
+
+  const t = translations[lang];
+
+  useEffect(() => {
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
@@ -263,15 +276,17 @@ export default function App() {
     });
   };
 
-  const skillGroups = [
-    { category: 'Mobile Development', color: ACCENT, items: ['Flutter', 'Dart', 'Clean Architecture', 'Responsive UI'] },
-    { category: 'State Management', color: '#60a5fa', items: ['BLoC', 'Cubit', 'Provider'] },
-    { category: 'Backend & Data', color: '#22c55e', items: ['Firebase', 'REST API', 'WebSocket', 'SQLite', 'Hive', 'Shared Prefs'] },
-    { category: 'AI-Assisted Development', color: PURPLE, items: ['Claude Code', 'ChatGPT', 'Prompt Engineering', 'AI Pair Programming'] },
-    { category: 'Design & Tools', color: '#ec4899', items: ['Figma', 'UI/UX', 'Git'] },
-    { category: 'Publishing', color: ACCENT, items: ['Google Play', 'App Store'] },
-    { category: 'Languages', color: '#60a5fa', items: ['English (IELTS 6.0)'] },
+  const skillColors = [ACCENT, '#60a5fa', '#22c55e', PURPLE, '#ec4899', ACCENT, '#60a5fa'];
+  const skillItems = [
+    ['Flutter', 'Dart', 'Clean Architecture', 'Responsive UI'],
+    ['BLoC', 'Cubit', 'Provider'],
+    ['Firebase', 'REST API', 'WebSocket', 'SQLite', 'Hive', 'Shared Prefs'],
+    ['Claude Code', 'ChatGPT', 'Prompt Engineering', 'AI Pair Programming'],
+    ['Figma', 'UI/UX', 'Git'],
+    ['Google Play', 'App Store'],
+    ['English (IELTS 6.0)'],
   ];
+  const skillGroups = t.skillCategories.map((category, i) => ({ category, color: skillColors[i], items: skillItems[i] }));
 
   const techStack = [
     'Flutter', 'Dart', 'Firebase', 'BLoC', 'REST API',
@@ -279,17 +294,18 @@ export default function App() {
     'Google Play', 'App Store',
   ];
 
-  const projects = [
-    { name: 'INVAN POS', category: 'Retail / POS', description: 'A store-automation system (POS) for retail shops & supermarkets — it runs the whole checkout counter: scanning products, taking cash & Payme/Click/Uzum payments, printing fiscal receipts, and managing discounts, returns and sales reports. A Windows desktop app (Flutter) with real-time sync, live on 100+ terminals.', tech: ['Flutter', 'Windows Desktop', 'WebSocket', 'REST API', 'Provider', 'ObjectBox', 'Fiscal API'], img: null, isInternal: true, webUrl: 'https://invan.uz' },
-    { name: 'TIIN LOYALTY', category: 'Fintech / Loyalty', description: 'Cashback & loyalty card app for supermarkets — customers collect cashback and store their loyalty cards in one place. 40,000+ downloads across Google Play and the App Store.', tech: ['Flutter', 'Firebase', 'REST API', 'BLoC'], img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
-    { name: 'INVAN MOBILE', category: 'Business / Inventory', description: 'Business management & inventory-control app — real-time sales tracking, stock management and reports for shop owners on the go.', tech: ['Flutter', 'REST API', 'Provider', 'WebSocket'], img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
-    { name: 'SAJDA MOBILE', category: 'Lifestyle / Islamic', description: 'Islamic prayer companion — accurate prayer times, Qibla direction compass and Azan alerts based on the user’s location.', tech: ['Flutter', 'Geolocation', 'Local Notifications', 'REST API'], img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
-    { name: 'STROY BAZA N1', category: 'Marketplace', description: 'Construction-materials marketplace — browse products, prices and suppliers of building materials in one app.', tech: ['Flutter', 'REST API', 'BLoC'], img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
-    { name: 'CARINFOPRO', category: 'Utility / QR', description: 'Scan a car’s QR sticker to reach the owner without sharing a phone number — a privacy-friendly contact system for Uzbekistan’s roads.', tech: ['Flutter', 'QR Scanner', 'REST API', 'Firebase'], img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
-    { name: 'DICTIONARY EVEREST', category: 'Education', description: 'A smart Uzbek–English dictionary with fast offline search and a clean, distraction-free interface.', tech: ['Flutter', 'SQLite', 'Offline'], img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
-    { name: 'TIC TAC TOE INFINITY', category: 'Game', description: 'A modern twist on Tic Tac Toe with an infinite board, local multiplayer and an AI opponent.', tech: ['Flutter', 'Game Logic', 'AI Opponent'], img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
-    { name: 'VOCAB MASTER', category: 'Education', description: 'Learn English vocabulary efficiently with a spaced-repetition system that shows words right before you forget them.', tech: ['Flutter', 'Hive', 'Spaced Repetition'], img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
+  const projectMeta = [
+    { name: 'INVAN POS', tech: ['Flutter', 'Windows Desktop', 'WebSocket', 'REST API', 'Provider', 'ObjectBox', 'Fiscal API'], img: null as string | null, isInternal: true, webUrl: 'https://invan.uz' as string | undefined, googlePlayUrl: undefined as string | undefined, appStoreUrl: undefined as string | undefined },
+    { name: 'TIIN LOYALTY', tech: ['Flutter', 'Firebase', 'REST API', 'BLoC'], img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'INVAN MOBILE', tech: ['Flutter', 'REST API', 'Provider', 'WebSocket'], img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
+    { name: 'SAJDA MOBILE', tech: ['Flutter', 'Geolocation', 'Local Notifications', 'REST API'], img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
+    { name: 'STROY BAZA N1', tech: ['Flutter', 'REST API', 'BLoC'], img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
+    { name: 'CARINFOPRO', tech: ['Flutter', 'QR Scanner', 'REST API', 'Firebase'], img: carinfoproImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.carinfopro', appStoreUrl: 'https://apps.apple.com/uz/app/carinfopro/id6759032034' },
+    { name: 'DICTIONARY EVEREST', tech: ['Flutter', 'SQLite', 'Offline'], img: dictionaryImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.dic.randomic' },
+    { name: 'TIC TAC TOE INFINITY', tech: ['Flutter', 'Game Logic', 'AI Opponent'], img: tictactoeImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.sajdaapp', appStoreUrl: 'https://apps.apple.com/uz/app/tic-tac-toe-infinity/id6754776498' },
+    { name: 'VOCAB MASTER', tech: ['Flutter', 'Hive', 'Spaced Repetition'], img: vocabmasterImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.vocab_master' },
   ];
+  const projects = projectMeta.map((p, i) => ({ ...p, category: t.projects[i].category, description: t.projects[i].description }));
 
   const contactLinks = [
     { href: 'mailto:ayubxonahmadjonov43@gmail.com', Icon: Mail, label: 'Email', value: 'ayubxonahmadjonov43@gmail.com', color: '#f97316' },
@@ -300,12 +316,13 @@ export default function App() {
     { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ahmadjonov_2122', color: '#f472b6' },
   ];
 
-  const serviceCards = [
-    { Icon: Smartphone, title: 'Mobile Apps', desc: 'Cross-platform Flutter development for iOS & Android. Clean architecture, BLoC, Firebase.', color: ACCENT },
-    { Icon: Code2, title: 'Backend Integration', desc: 'RESTful APIs, WebSocket, Firebase Auth/Firestore, real-time data sync.', color: '#60a5fa' },
-    { Icon: BookOpen, title: 'Clean Architecture', desc: 'Feature-first folder structure, repository pattern, dependency injection.', color: '#34d399' },
-    { Icon: Briefcase, title: 'App Deployment', desc: 'Google Play & App Store publishing, versioning, signing, release management.', color: PURPLE },
+  const serviceMeta = [
+    { Icon: Smartphone, color: ACCENT },
+    { Icon: Code2, color: '#60a5fa' },
+    { Icon: BookOpen, color: '#34d399' },
+    { Icon: Briefcase, color: PURPLE },
   ];
+  const serviceCards = serviceMeta.map((s, i) => ({ ...s, title: t.doing.cards[i].title, desc: t.doing.cards[i].desc }));
 
   return (
     <div style={{
@@ -359,7 +376,7 @@ export default function App() {
                   Ayyubxon Ahmadjonov
                 </h1>
                 <span style={{ fontSize: '12px', color: '#f0c070', padding: '5px 12px', borderRadius: '7px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.2)', fontWeight: 500 }}>
-                  Flutter Developer
+                  {t.role}
                 </span>
               </div>
             </div>
@@ -383,7 +400,7 @@ export default function App() {
                     }}
                   >
                     <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
-                    <span style={{ fontSize: '11px', color: '#86efac', fontWeight: 500 }}>Available</span>
+                    <span style={{ fontSize: '11px', color: '#86efac', fontWeight: 500 }}>{t.available}</span>
                   </motion.div>
                 </div>
               </div>
@@ -392,12 +409,12 @@ export default function App() {
               </h1>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
                 <span style={{ fontSize: '13px', color: '#f0c070', padding: '7px 20px', borderRadius: '8px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.22)', fontWeight: 600 }}>
-                  Flutter Developer
+                  {t.role}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
                 <span style={{ fontSize: '12px', color: '#9ca3af', padding: '4px 14px', borderRadius: '6px', backgroundColor: '#222', border: '1px solid #2a2a2a' }}>
-                  @ Invan Soft, Tashkent
+                  {t.atCompany}
                 </span>
               </div>
             </>
@@ -408,10 +425,10 @@ export default function App() {
           {/* ── Contact info ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
             {([
-              { Icon: Mail, label: 'EMAIL', value: 'ayubxonahmadjonov43@gmail.com', copyKey: 'email' },
-              { Icon: Phone, label: 'PHONE', value: '+998 88 739 21 22', copyKey: 'phone' },
-              { Icon: Calendar, label: 'BIRTHDAY', value: 'May 8, 2008', copyKey: null },
-              { Icon: MapPin, label: 'LOCATION', value: 'Fergana, Uzbekistan', copyKey: null },
+              { Icon: Mail, label: t.info.email, value: 'ayubxonahmadjonov43@gmail.com', copyKey: 'email' },
+              { Icon: Phone, label: t.info.phone, value: '+998 88 739 21 22', copyKey: 'phone' },
+              { Icon: Calendar, label: t.info.birthday, value: t.birthdayValue, copyKey: null },
+              { Icon: MapPin, label: t.info.location, value: t.locationValue, copyKey: null },
             ] as { Icon: React.ElementType; label: string; value: string; copyKey: string | null }[]).map(({ Icon, label, value, copyKey }) => (
               <div key={label} style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
@@ -439,7 +456,7 @@ export default function App() {
                       color: copiedKey === copyKey ? '#22c55e' : '#4b5563',
                       transition: 'color 0.2s',
                     }}
-                    title="Copy"
+                    title={t.copy}
                   >
                     {copiedKey === copyKey
                       ? <Check style={{ width: '14px', height: '14px' }} />
@@ -491,6 +508,29 @@ export default function App() {
               </motion.a>
             ))}
           </div>
+
+          {/* ── Language switcher ── */}
+          <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, #2a2a2a, transparent)', margin: '16px 0' }} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+            {LANGS.map(({ code, label }) => (
+              <motion.button
+                key={code}
+                onClick={() => setLang(code)}
+                whileTap={{ scale: 0.94 }}
+                style={{
+                  flex: 1, maxWidth: '72px', padding: '7px 0', borderRadius: '9px',
+                  fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif",
+                  background: lang === code ? 'rgba(245,158,11,0.14)' : '#222',
+                  border: lang === code ? '1px solid rgba(245,158,11,0.4)' : '1px solid #2a2a2a',
+                  color: lang === code ? ACCENT : '#9ca3af',
+                  transition: 'color 0.2s, background-color 0.2s, border-color 0.2s',
+                }}
+              >
+                {label}
+              </motion.button>
+            ))}
+          </div>
         </motion.aside>
 
         {/* ── MAIN CONTENT ── */}
@@ -523,11 +563,11 @@ export default function App() {
                     fontWeight: 500,
                     color: activeTab === tab ? ACCENT : '#6b7280',
                     background: 'none', border: 'none', cursor: 'pointer',
-                    textTransform: 'capitalize', transition: 'color 0.2s',
+                    transition: 'color 0.2s',
                     whiteSpace: 'nowrap', fontFamily: "'DM Sans', sans-serif",
                   }}
                 >
-                  {tab}
+                  {t.nav[tab]}
                   {activeTab === tab && (
                     <motion.div
                       layoutId="tabUnderline"
@@ -562,34 +602,31 @@ export default function App() {
                     {/* About Me */}
                     <section>
                       <h2 style={{ fontSize: isMobile ? '24px' : '30px', fontWeight: 800, color: '#fff', marginBottom: '10px', fontFamily: "'DM Sans', sans-serif" }}>
-                        About Me
+                        {t.about.title}
                       </h2>
                       <div style={{ height: '3px', width: '48px', background: `linear-gradient(to right, ${ACCENT}, #ef4444)`, borderRadius: '2px', marginBottom: '18px' }} />
                       <p style={{ color: '#d1d5db', lineHeight: 1.85, fontSize: isMobile ? '14px' : '15px', marginBottom: '14px' }}>
-                        I'm a Flutter Developer with nearly 1 year of experience building cross-platform mobile apps for iOS and Android.
-                        Currently working full-time at <span style={{ color: ACCENT, fontWeight: 600 }}>Invan Soft, Tashkent</span> — developing production-grade apps used by real businesses across Uzbekistan.
+                        {t.about.intro}
                       </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', fontSize: isMobile ? '14px' : '15px', color: '#c9d1db' }}>
-                        <p>🚀 Building clean architecture Flutter apps since 2023.</p>
-                        <p>📱 10+ apps published on Google Play & App Store.</p>
-                        <p>🎯 Focused on performance, clean code, and great UX.</p>
+                        {t.about.bullets.map((b) => <p key={b}>{b}</p>)}
                       </div>
                     </section>
 
                     {/* Stats */}
                     <section>
                       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <StatCard value={1} suffix="+" label="Years Exp." active={statsActive} />
-                        <StatCard value={10} suffix="+" label="Apps Published" active={statsActive} />
-                        <StatCard value={40} suffix="K+" label="Downloads" active={statsActive} />
-                        <StatCard value={9} suffix="" label="Projects" active={statsActive} />
+                        <StatCard value={1} suffix="+" label={t.stats.years} active={statsActive} />
+                        <StatCard value={10} suffix="+" label={t.stats.apps} active={statsActive} />
+                        <StatCard value={40} suffix="K+" label={t.stats.downloads} active={statsActive} />
+                        <StatCard value={9} suffix="" label={t.stats.projects} active={statsActive} />
                       </div>
                     </section>
 
                     {/* What I'm Doing */}
                     <section>
                       <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>
-                        What I'm Doing
+                        {t.doing.title}
                       </h2>
                       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
                         {serviceCards.map(({ Icon, title, desc, color }) => (
@@ -632,7 +669,7 @@ export default function App() {
                     {/* Tech Stack */}
                     <section>
                       <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>
-                        Tech Stack
+                        {t.techStackTitle}
                       </h2>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {techStack.map((tech) => (
@@ -655,7 +692,7 @@ export default function App() {
                     {/* Skills */}
                     <section>
                       <h2 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '18px', fontFamily: "'DM Sans', sans-serif" }}>
-                        My Skills
+                        {t.skillsTitle}
                       </h2>
                       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '26px 40px' }}>
                         {skillGroups.map((g) => <SkillGroup key={g.category} category={g.category} items={g.items} color={g.color} />)}
@@ -683,32 +720,26 @@ export default function App() {
                         }}
                       >
                         <Download style={{ width: '16px', height: '16px' }} />
-                        Download CV
+                        {t.resume.downloadCv}
                       </motion.a>
                     </div>
 
                     <section>
-                      <SectionHeader Icon={Briefcase} title="Work Experience" isMobile={isMobile} />
+                      <SectionHeader Icon={Briefcase} title={t.resume.workExp} isMobile={isMobile} />
                       <div style={{ position: 'relative', paddingLeft: '28px' }}>
                         <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', background: `linear-gradient(to bottom, ${ACCENT}, ${PURPLE})` }} />
 
                         <div style={{ position: 'relative', marginBottom: '32px' }}>
                           <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: ACCENT, boxShadow: `0 0 12px ${ACCENT}70` }} />
                           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>Flutter Developer</h3>
+                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>{t.resume.jobs[0].title}</h3>
                             <span style={{ fontSize: '12px', color: ACCENT, backgroundColor: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', padding: '3px 10px', borderRadius: '6px', whiteSpace: 'nowrap', fontWeight: 500 }}>
-                              Jun 2025 – Present
+                              {t.resume.jobs[0].period}
                             </span>
                           </div>
-                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft · Tashkent, Uzbekistan</p>
+                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>{t.resume.jobs[0].place}</p>
                           <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            {[
-                              'Developed and maintained 5+ production mobile apps',
-                              'Built POS system: sales, discounts, barcode scanning, receipt printing',
-                              'Invan Mobile — inventory & business management app',
-                              'Tiin Loyalty — cashback & loyalty card app (40K+ downloads)',
-                              'Inventory Turnover — stock rotation analytics',
-                            ].map(item => (
+                            {t.resume.jobs[0].bullets.map(item => (
                               <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
                                 <span style={{ color: ACCENT, flexShrink: 0, marginTop: '1px' }}>▸</span><span>{item}</span>
                               </li>
@@ -719,18 +750,14 @@ export default function App() {
                         <div style={{ position: 'relative' }}>
                           <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: PURPLE, boxShadow: `0 0 12px ${PURPLE}70` }} />
                           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>Flutter Developer Intern</h3>
+                            <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>{t.resume.jobs[1].title}</h3>
                             <span style={{ fontSize: '12px', color: PURPLE, backgroundColor: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)', padding: '3px 10px', borderRadius: '6px', whiteSpace: 'nowrap', fontWeight: 500 }}>
-                              Jun 2024 – May 2025
+                              {t.resume.jobs[1].period}
                             </span>
                           </div>
-                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>Invan Soft · Tashkent, Uzbekistan</p>
+                          <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '10px' }}>{t.resume.jobs[1].place}</p>
                           <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            {[
-                              'Learned BLoC and Clean Architecture patterns',
-                              'Contributed to real production projects under senior guidance',
-                              'Completed Flutter & Dart Training Program',
-                            ].map(item => (
+                            {t.resume.jobs[1].bullets.map(item => (
                               <li key={item} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#d1d5db' }}>
                                 <span style={{ color: PURPLE, flexShrink: 0, marginTop: '1px' }}>▸</span><span>{item}</span>
                               </li>
@@ -741,14 +768,10 @@ export default function App() {
                     </section>
 
                     <section>
-                      <SectionHeader Icon={GraduationCap} title="Education" isMobile={isMobile} />
+                      <SectionHeader Icon={GraduationCap} title={t.resume.education} isMobile={isMobile} />
                       <div style={{ position: 'relative', paddingLeft: '28px' }}>
                         <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', background: `linear-gradient(to bottom, ${ACCENT}, ${PURPLE})` }} />
-                        {[
-                          { name: 'Invan Soft', sub: 'Flutter & Dart Training Program', period: '2023 – 2024', extra: 'Mobile Development Practical Course' },
-                          { name: 'Vocational School No.1, Fergana', sub: 'IT Specialization', period: '2024 – 2026', extra: '2nd year student' },
-                          { name: 'Everest Language Learning Center', sub: 'English Language Program', period: 'IELTS Band 6.0', extra: undefined },
-                        ].map(({ name, sub, period, extra }, i) => (
+                        {t.resume.edu.map(({ name, sub, period, extra }, i) => (
                           <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '28px' : 0 }}>
                             <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: ACCENT, boxShadow: `0 0 10px ${ACCENT}55` }} />
                             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
@@ -764,7 +787,7 @@ export default function App() {
                     </section>
 
                     <section>
-                      <SectionHeader Icon={Code2} title="Skills" isMobile={isMobile} />
+                      <SectionHeader Icon={Code2} title={t.resume.skillsTitle} isMobile={isMobile} />
                       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '26px 40px' }}>
                         {skillGroups.map((g) => <SkillGroup key={g.category} category={g.category} items={g.items} color={g.color} />)}
                       </div>
@@ -777,10 +800,10 @@ export default function App() {
                   <div>
                     <div style={{ marginBottom: '26px' }}>
                       <h2 style={{ fontSize: isMobile ? '24px' : '30px', fontWeight: 800, color: '#fff', marginBottom: '6px', fontFamily: "'DM Sans', sans-serif" }}>
-                        Portfolio
+                        {t.portfolio.title}
                       </h2>
                       <p style={{ color: '#6b7280', fontSize: '14px' }}>
-                        {projects.length} apps — published on Google Play & App Store
+                        {t.portfolio.subtitle(projects.length)}
                       </p>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: '12px' }}>
@@ -827,7 +850,7 @@ export default function App() {
                               display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                             }}>{project.description}</p>
                             <span style={{ fontSize: '11px', color: ACCENT, fontWeight: 600, marginBottom: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                              View details →
+                              {t.portfolio.details} →
                             </span>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: 'auto' }}>
@@ -854,7 +877,7 @@ export default function App() {
                             {project.isInternal && !project.webUrl && (
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#222', borderRadius: '8px', padding: '7px', fontSize: '11px', color: '#9ca3af', border: '1px solid #2a2a2a' }}>
                                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#60a5fa', flexShrink: 0 }} />
-                                Internal Product
+                                {t.modal.internal}
                               </div>
                             )}
                           </div>
@@ -880,14 +903,14 @@ export default function App() {
                         }}
                       >
                         <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
-                        Open to work
+                        {t.contact.openToWork}
                       </motion.span>
                     </div>
                     <h2 style={{ fontSize: isMobile ? '24px' : '32px', fontWeight: 800, color: '#fff', marginBottom: '8px', fontFamily: "'DM Sans', sans-serif" }}>
-                      Let's Work Together
+                      {t.contact.title}
                     </h2>
                     <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '26px', lineHeight: 1.65 }}>
-                      Have a project in mind? I'd love to hear about it. Reach out via any channel below.
+                      {t.contact.subtitle}
                     </p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {contactLinks.map(({ href, Icon, label, value, color }) => (
@@ -947,8 +970,8 @@ export default function App() {
                           <MapPin style={{ width: '18px', height: '18px', color: ACCENT }} />
                         </div>
                         <div>
-                          <p style={{ fontSize: '10px', color: '#6b7280', marginBottom: '2px', fontWeight: 600, letterSpacing: '0.07em' }}>LOCATION</p>
-                          <p style={{ fontSize: isMobile ? '13px' : '14px', color: '#e5e7eb' }}>Fergana, Uzbekistan</p>
+                          <p style={{ fontSize: '10px', color: '#6b7280', marginBottom: '2px', fontWeight: 600, letterSpacing: '0.07em' }}>{t.contact.locationLabel}</p>
+                          <p style={{ fontSize: isMobile ? '13px' : '14px', color: '#e5e7eb' }}>{t.locationValue}</p>
                         </div>
                       </div>
                     </div>
@@ -967,7 +990,7 @@ export default function App() {
             project={projects[selectedProject]}
             onClose={() => setSelectedProject(null)}
             isMobile={isMobile}
-            labels={{ builtWith: 'Built with', visit: 'Visit website', internal: 'Internal Product' }}
+            labels={t.modal}
           />
         )}
       </AnimatePresence>
