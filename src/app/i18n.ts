@@ -95,8 +95,7 @@ export const translations: Record<Lang, Translation> = {
         },
       ],
       edu: [
-        { name: 'Invan Soft', sub: 'Flutter & Dart Training Program', period: '2023 – 2024', extra: 'Mobile Development Practical Course' },
-        { name: 'Vocational School No.1, Fergana', sub: 'IT Specialization', period: '2024 – 2026', extra: '2nd year student' },
+        { name: 'Vocational School No.1, Fergana', sub: 'Mechanical Engineering', period: '2024 – 2026', extra: 'Graduated' },
         { name: 'Everest Language Learning Center', sub: 'English Language Program', period: 'IELTS Band 6.0' },
       ],
     },
@@ -186,8 +185,7 @@ export const translations: Record<Lang, Translation> = {
         },
       ],
       edu: [
-        { name: 'Invan Soft', sub: 'Учебная программа Flutter & Dart', period: '2023 – 2024', extra: 'Практический курс мобильной разработки' },
-        { name: 'Профессиональный колледж №1, Фергана', sub: 'IT-специализация', period: '2024 – 2026', extra: 'Студент 2 курса' },
+        { name: 'Профессиональный колледж №1, Фергана', sub: 'Машиностроение', period: '2024 – 2026', extra: 'Окончил' },
         { name: 'Учебный центр Everest', sub: 'Программа английского языка', period: 'IELTS 6.0' },
       ],
     },
@@ -277,8 +275,7 @@ export const translations: Record<Lang, Translation> = {
         },
       ],
       edu: [
-        { name: 'Invan Soft', sub: "Flutter & Dart o'quv dasturi", period: '2023 – 2024', extra: 'Mobil dasturlash amaliy kursi' },
-        { name: "1-sonli kasb-hunar maktabi, Farg'ona", sub: 'IT yo‘nalishi', period: '2024 – 2026', extra: '2-kurs talabasi' },
+        { name: "1-sonli kasb-hunar maktabi, Farg'ona", sub: 'Mashinasozlik', period: '2024 – 2026', extra: 'Bitirgan' },
         { name: "Everest til o'rganish markazi", sub: 'Ingliz tili dasturi', period: 'IELTS 6.0' },
       ],
     },

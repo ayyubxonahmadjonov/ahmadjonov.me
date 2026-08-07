@@ -772,7 +772,7 @@ export default function App() {
                       <div style={{ position: 'relative', paddingLeft: '28px' }}>
                         <div style={{ position: 'absolute', left: '6px', top: '8px', bottom: '8px', width: '2px', background: `linear-gradient(to bottom, ${ACCENT}, ${PURPLE})` }} />
                         {t.resume.edu.map(({ name, sub, period, extra }, i) => (
-                          <div key={name} style={{ position: 'relative', paddingBottom: i < 2 ? '28px' : 0 }}>
+                          <div key={name} style={{ position: 'relative', paddingBottom: i < t.resume.edu.length - 1 ? '28px' : 0 }}>
                             <div style={{ position: 'absolute', left: '-23px', top: '5px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: ACCENT, boxShadow: `0 0 10px ${ACCENT}55` }} />
                             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
                               <h3 style={{ fontWeight: 700, color: '#fff', fontSize: isMobile ? '15px' : '17px' }}>{name}</h3>
