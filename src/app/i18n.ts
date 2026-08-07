@@ -107,7 +107,7 @@ export const translations: Record<Lang, Translation> = {
     },
     projects: [
       { category: 'Retail / POS', description: 'A store-automation system (POS) for retail shops & supermarkets — it runs the whole checkout counter: scanning products, taking cash & Payme/Click/Uzum payments, printing fiscal receipts, and managing discounts, returns and sales reports. A Windows desktop app (Flutter) with real-time sync, live on 100+ terminals.' },
-      { category: 'Fintech / Loyalty', description: 'Cashback & loyalty card app for supermarkets — customers collect cashback and store their loyalty cards in one place. 40,000+ downloads across Google Play and the App Store.' },
+      { category: 'Loyalty / E-commerce', description: 'A cashback, loyalty and e-commerce app for supermarkets — customers collect cashback, keep their loyalty cards in one place, and shop online through the in-app store. Users can place online orders for delivery; the e-commerce section is integrated via a WebView. 40,000+ downloads across Google Play and the App Store.' },
       { category: 'Business / Inventory', description: 'Business management & inventory-control app — real-time sales tracking, stock management and reports for shop owners on the go.' },
       { category: 'Lifestyle / Islamic', description: 'Islamic prayer companion — accurate prayer times, Qibla direction compass and Azan alerts based on the user’s location.' },
       { category: 'Marketplace', description: 'Construction-materials marketplace — browse products, prices and suppliers of building materials in one app.' },
@@ -198,7 +198,7 @@ export const translations: Record<Lang, Translation> = {
     },
     projects: [
       { category: 'Ритейл / POS', description: 'Система автоматизации магазинов (POS) для розницы и супермаркетов — управляет всей кассовой зоной: сканирование товаров, приём наличных и оплат Payme/Click/Uzum, печать фискальных чеков, скидки, возвраты и отчёты о продажах. Десктоп-приложение для Windows (Flutter) с синхронизацией в реальном времени, работает на 100+ терминалах.' },
-      { category: 'Финтех / Лояльность', description: 'Приложение кэшбэка и карт лояльности для супермаркетов — клиенты копят кэшбэк и хранят карты лояльности в одном месте. 40 000+ загрузок в Google Play и App Store.' },
+      { category: 'Лояльность / E-commerce', description: 'Приложение кэшбэка, лояльности и электронной коммерции для супермаркетов — клиенты копят кэшбэк, хранят карты лояльности в одном месте и делают покупки онлайн во встроенном магазине. Можно оформлять онлайн-заказы с доставкой; раздел e-commerce интегрирован через WebView. 40 000+ загрузок в Google Play и App Store.' },
       { category: 'Бизнес / Склад', description: 'Приложение для управления бизнесом и складом — отслеживание продаж в реальном времени, управление остатками и отчёты для владельцев магазинов.' },
       { category: 'Образ жизни / Ислам', description: 'Исламский помощник — точное время намаза, компас направления Киблы и уведомления азана по геолокации.' },
       { category: 'Маркетплейс', description: 'Маркетплейс стройматериалов — товары, цены и поставщики строительных материалов в одном приложении.' },
@@ -289,7 +289,7 @@ export const translations: Record<Lang, Translation> = {
     },
     projects: [
       { category: 'Savdo / POS', description: "Do'kon va supermarketlar uchun avtomatlashtirish (POS) tizimi — butun kassa jarayonini boshqaradi: mahsulot skanerlash, naqd va Payme/Click/Uzum to'lovlari, fiskal chek chop etish, chegirmalar, qaytarishlar va savdo hisobotlari. Windows desktop ilovasi (Flutter), real vaqtda sinxronizatsiya bilan, 100+ terminalda ishlaydi." },
-      { category: 'Fintech / Loyalty', description: "Supermarketlar uchun cashback va sodiqlik kartasi ilovasi — mijozlar cashback yig'adi va sodiqlik kartalarini bir joyda saqlaydi. Google Play va App Store'da 40 000+ yuklab olish." },
+      { category: 'Loyalty / E-commerce', description: "Supermarketlar uchun cashback, sodiqlik va e-commerce ilovasi — mijozlar cashback yig'adi, sodiqlik kartalarini bir joyda saqlaydi va ilova ichidagi do'kondan onlayn xarid qiladi. Foydalanuvchilar yetkazib berish uchun onlayn zakaz berishlari mumkin; e-commerce qismi WebView orqali ulangan. Google Play va App Store'da 40 000+ yuklab olish." },
       { category: 'Biznes / Ombor', description: "Biznes va ombor boshqaruv ilovasi — real vaqtdagi savdo kuzatuvi, qoldiqlarni boshqarish va do'kon egalari uchun hisobotlar." },
       { category: 'Turmush / Islomiy', description: "Islomiy hamroh — aniq namoz vaqtlari, Qibla yo'nalishi kompasi va joylashuvga qarab azon eslatmalari." },
       { category: 'Marketplace', description: "Qurilish materiallari bozori — bitta ilovada qurilish materiallari mahsulotlari, narxlari va yetkazib beruvchilari." },

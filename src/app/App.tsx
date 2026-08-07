@@ -296,7 +296,7 @@ export default function App() {
 
   const projectMeta = [
     { name: 'INVAN POS', tech: ['Flutter', 'Windows Desktop', 'WebSocket', 'REST API', 'Provider', 'ObjectBox', 'Fiscal API'], img: null as string | null, isInternal: true, webUrl: 'https://invan.uz' as string | undefined, googlePlayUrl: undefined as string | undefined, appStoreUrl: undefined as string | undefined },
-    { name: 'TIIN LOYALTY', tech: ['Flutter', 'Firebase', 'REST API', 'BLoC'], img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
+    { name: 'TIIN LOYALTY', tech: ['Flutter', 'Firebase', 'REST API', 'BLoC', 'WebView', 'E-commerce'], img: tiinImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=cashback.in1.uz', appStoreUrl: 'https://apps.apple.com/uz/app/tiin-loyalty/id1609771623' },
     { name: 'INVAN MOBILE', tech: ['Flutter', 'REST API', 'Provider', 'WebSocket'], img: invanImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=invan2.in2.uz', appStoreUrl: 'https://apps.apple.com/uz/app/invan-mobile/id6749793383' },
     { name: 'SAJDA MOBILE', tech: ['Flutter', 'Geolocation', 'Local Notifications', 'REST API'], img: sajdaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=uz.ayyubxon.sajda_app', appStoreUrl: 'https://apps.apple.com/uz/app/sajda-mobile/id6754518453' },
     { name: 'STROY BAZA N1', tech: ['Flutter', 'REST API', 'BLoC'], img: stroybazaImg, googlePlayUrl: 'https://play.google.com/store/apps/details?id=com.gold_house', appStoreUrl: 'https://apps.apple.com/uz/app/stroy-baza-n1/id6754191756' },
