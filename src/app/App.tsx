@@ -284,7 +284,7 @@ export default function App() {
     ['Claude Code', 'ChatGPT', 'Prompt Engineering', 'AI Pair Programming'],
     ['Figma', 'UI/UX', 'Git'],
     ['Google Play', 'App Store'],
-    ['English (IELTS 6.0)'],
+    ['Uzbek (Native)', 'English (IELTS 6.0)'],
   ];
   const skillGroups = t.skillCategories.map((category, i) => ({ category, color: skillColors[i], items: skillItems[i] }));
 
