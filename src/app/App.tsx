@@ -313,7 +313,7 @@ export default function App() {
     { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle, label: 'Telegram', value: '@ayyubxon_akhmadjonov', color: '#38bdf8' },
     { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/ayyubxon-ahmadjonov', color: '#60a5fa' },
     { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github, label: 'GitHub', value: 'github.com/ayyubxonahmadjonov', color: '#d1d5db' },
-    { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ahmadjonov_2122', color: '#f472b6' },
+    { href: 'https://www.instagram.com/ayyubxon_akhmadjonov/', Icon: Instagram, label: 'Instagram', value: 'instagram.com/ayyubxon_akhmadjonov', color: '#f472b6' },
   ];
 
   const serviceMeta = [
@@ -473,7 +473,7 @@ export default function App() {
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
             {([
               { href: 'https://t.me/ayyubxon_akhmadjonov', Icon: MessageCircle, label: 'Telegram' },
-              { href: 'https://www.instagram.com/ahmadjonov_2122/', Icon: Instagram, label: 'Instagram' },
+              { href: 'https://www.instagram.com/ayyubxon_akhmadjonov/', Icon: Instagram, label: 'Instagram' },
               { href: 'https://github.com/ayyubxonahmadjonov', Icon: Github, label: 'GitHub' },
               { href: 'https://www.linkedin.com/in/ayyubxon-ahmadjonov', Icon: Linkedin, label: 'LinkedIn' },
             ] as { href: string; Icon: React.ElementType; label: string }[]).map(({ href, Icon, label }) => (
@@ -605,12 +605,9 @@ export default function App() {
                         {t.about.title}
                       </h2>
                       <div style={{ height: '3px', width: '48px', background: `linear-gradient(to right, ${ACCENT}, #ef4444)`, borderRadius: '2px', marginBottom: '18px' }} />
-                      <p style={{ color: '#d1d5db', lineHeight: 1.85, fontSize: isMobile ? '14px' : '15px', marginBottom: '14px' }}>
+                      <p style={{ color: '#d1d5db', lineHeight: 1.85, fontSize: isMobile ? '14px' : '15px' }}>
                         {t.about.intro}
                       </p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', fontSize: isMobile ? '14px' : '15px', color: '#c9d1db' }}>
-                        {t.about.bullets.map((b) => <p key={b}>{b}</p>)}
-                      </div>
                     </section>
 
                     {/* Stats */}

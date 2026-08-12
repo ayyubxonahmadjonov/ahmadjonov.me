@@ -20,7 +20,7 @@ export interface Translation {
   birthdayValue: string;
   locationValue: string;
   copy: string;
-  about: { title: string; intro: string; bullets: string[] };
+  about: { title: string; intro: string };
   stats: { years: string; apps: string; downloads: string; projects: string };
   doing: { title: string; cards: CardText[] };
   techStackTitle: string;
@@ -46,11 +46,6 @@ export const translations: Record<Lang, Translation> = {
     about: {
       title: 'About Me',
       intro: "I'm a Flutter Developer with nearly 1 year of experience building cross-platform mobile apps for iOS and Android. I currently work full-time at Invan Soft, Tashkent — developing production-grade apps used by real businesses across Uzbekistan.",
-      bullets: [
-        '🚀 Building clean architecture Flutter apps since 2023.',
-        '📱 10+ apps published on Google Play & App Store.',
-        '🎯 Focused on performance, clean code, and great UX.',
-      ],
     },
     stats: { years: 'Years Exp.', apps: 'Apps Published', downloads: 'Downloads', projects: 'Projects' },
     doing: {
@@ -136,11 +131,6 @@ export const translations: Record<Lang, Translation> = {
     about: {
       title: 'Обо мне',
       intro: 'Я Flutter-разработчик с почти годовым опытом создания кроссплатформенных мобильных приложений для iOS и Android. Сейчас работаю полный день в Invan Soft, Ташкент — разрабатываю production-приложения, которыми пользуется реальный бизнес по всему Узбекистану.',
-      bullets: [
-        '🚀 Создаю Flutter-приложения на чистой архитектуре с 2023 года.',
-        '📱 10+ приложений опубликовано в Google Play и App Store.',
-        '🎯 Фокус на производительности, чистом коде и удобстве.',
-      ],
     },
     stats: { years: 'Лет опыта', apps: 'Приложений', downloads: 'Загрузок', projects: 'Проектов' },
     doing: {
@@ -226,11 +216,6 @@ export const translations: Record<Lang, Translation> = {
     about: {
       title: 'Men haqimda',
       intro: "Men Flutter dasturchisiman, iOS va Android uchun kross-platforma mobil ilovalar yaratishda deyarli 1 yillik tajribaga egaman. Hozir Invan Soft, Toshkent kompaniyasida to'liq stavkada ishlayman — O'zbekiston bo'ylab real bizneslar foydalanadigan professional ilovalarni ishlab chiqaman.",
-      bullets: [
-        "🚀 2023-yildan beri clean architecture asosida Flutter ilovalar yarataman.",
-        "📱 Google Play va App Store'da 10+ ilova chop etilgan.",
-        "🎯 Tezkorlik, toza kod va qulay UX'ga e'tibor qarataman.",
-      ],
     },
     stats: { years: 'Yil tajriba', apps: 'Ilovalar', downloads: 'Yuklab olishlar', projects: 'Loyihalar' },
     doing: {
